@@ -17,7 +17,7 @@ export default function Handler(  req: NextApiRequest,  res: NextApiResponse<Esp
       res.status(200).json(filtered[0])
       break
     case 'PUT':
-      res.status(200).json({message : "put"})
+      res.status(200).json({message : `PUT on ${filtered[0]._id}`})
       break
     default:
       res.setHeader('Allow', ['GET', 'PUT'])
