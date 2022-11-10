@@ -1,5 +1,5 @@
-import type  {Enclos}  from '../../Types/Enclos'
-import type  {Zones}  from '../../Types/Zones'
+import {Enclos}  from '../../Types/Enclos'
+import {Zones}  from '../../Types/Zones'
 import Link from 'next/link'
 
 type Props = {enclos : Enclos[],

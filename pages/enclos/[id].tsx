@@ -1,5 +1,6 @@
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
-import type  {Enclos}  from '../../Types/Enclos'
+import Link from 'next/link'
+import {Enclos}  from '../../Types/Enclos'
 import { Especes } from '../../Types/Especes'
 
 type props = {enclos : Enclos,
@@ -18,7 +19,9 @@ export default function Index({enclos,especeslst}: props): JSX.Element {
     <ul>
         {especeslst.map((especes:Especes) => especes.enclos === enclos._id &&
           <li key={especes._id}>
+            <Link href="/especes/[id]" as={`/especes/${especes._id}`}>
             {`especes ${especes._id}`}
+            </Link>
           </li>)}
     </ul>
     </>

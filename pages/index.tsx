@@ -1,6 +1,6 @@
-import Head from 'next/head'
+
 import styles from '../styles/Home.module.css'
-import type  {Enclos}  from '../Types/Enclos'
+import {Enclos}  from '../Types/Enclos'
 import useSwr from 'swr'
 import Link from 'next/link'
 
