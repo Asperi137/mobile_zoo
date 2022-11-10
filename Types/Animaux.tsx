@@ -2,8 +2,8 @@ export type Animaux = {
 	"_id": string;
 	"nom": string;
 	"espece": string;
-	"naissance": Date;
-	"deces": Date;
+	"naissance": string;
+	"deces": string;
 	"sexe": string;
 	"observations": string;
 	"position": string;

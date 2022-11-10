@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { Enclos } from '../../../Types/Enclos'
-import {enclos as data} from '../../../data/enclos'
+import {especes as data} from '../../../data/especes'
+import { Especes } from '../../../Types/Especes'
 
 type ResponseError = {
   message: string
 }
 
-export default function Handler(  req: NextApiRequest,  res: NextApiResponse<Enclos | ResponseError>) {
+export default function Handler(  req: NextApiRequest,  res: NextApiResponse<Especes | ResponseError>) {
   const { query, method } = req
   const { id } = query
   const filtered = data.filter((p) => p._id === id)
@@ -23,5 +23,5 @@ export default function Handler(  req: NextApiRequest,  res: NextApiResponse<Enc
       res.setHeader('Allow', ['GET', 'PUT'])
       res.status(405).end(`Method ${method} Not Allowed`)
   }}else
-  { res.status(404).json({ message: `enclos with id: ${id} not found.` })}
+  { res.status(404).json({ message: `especes with id: ${id} not found.` })}
 }
