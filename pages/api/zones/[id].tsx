@@ -1,27 +1,37 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import type { Zones } from '../../../Types/Zones'
-import {zones as data} from '../../../data/zones'
+import { NextApiRequest, NextApiResponse } from 'next'
+import Zones from '../../../Types/Zones'
+import Zone from '../../../models/zones'
+import mongooseConnect from '../../../lib/mongooseConnect'
+import ResponseError from '../../../Types/ResponseError'
 
-type ResponseError = {
-  message: string
-}
+mongooseConnect()
 
-export default function Handler(  req: NextApiRequest,  res: NextApiResponse<Zones | ResponseError>) {
-  const { query, method } = req
-  const { id } = query
-  const filtered = data.filter((p) => p._id === id)
+export default function Handler (
+  req: NextApiRequest,
+  res: NextApiResponse<Zones | ResponseError>
+) {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
+  )
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, PUT, DELETE, PATCH, OPTIONS'
+  )
 
-  if (filtered.length > 0){
-    switch (method) {
-      case 'GET':
-        res.status(200).json(filtered[0])
-        break
-      case 'PUT':
-        res.status(200).json({message : "put"})
-        break
-      default:
-        res.setHeader('Allow', ['GET', 'PUT'])
-        res.status(405).end(`Method ${method} Not Allowed`)
-  }}else
-  { res.status(404).json({ message: `zone with id: ${id} not found.` })}
+  switch (req.method) {
+    case 'GET':
+      Zone.findOne({ _id: req.query.id })
+        .then(thing => res.status(200).json(thing))
+        .catch(error => res.status(404).json(error))
+      break
+    case 'PUT':
+      res.status(200).json({ message: 'put' })
+      break
+
+    default:
+      res.setHeader('Allow', ['GET', 'PUT'])
+      res.status(405).end(`Method ${req.method} Not Allowed`)
+  }
 }

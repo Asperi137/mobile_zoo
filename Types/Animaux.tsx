@@ -1,10 +1,10 @@
-export type Animaux = {
-	"_id": string;
-	"nom": string;
-	"espece": string;
-	"naissance": string;
-	"deces": string;
-	"sexe": string;
-	"observations": string;
-	"position": string;
-};
+export default interface Animaux {
+  _id: string
+  nom: string
+  espece: string
+  naissance: string
+  deces: string
+  sexe: string
+  observations: string
+  position: string
+}

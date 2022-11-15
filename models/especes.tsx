@@ -1,12 +1,13 @@
-import mongoose from 'mongoose'
+import { model, models, Schema } from 'mongoose'
+import Especes from '../Types/Especes'
 
-const especesSchema = new mongoose.Schema({
+const especesSchema = new Schema<Especes>({
   _id: { type: String, required: true },
   nom: { type: String, required: true },
   sociable: { type: Boolean, required: true },
-  observation: { type: String, required: false },
+  observations: { type: String, required: true },
   dangereux: { type: Boolean, required: true },
   enclos: { type: String, required: true }
-});
+})
 
-export default  mongoose.model('Especes', especesSchema);
+export default models.Especes || model<Especes>('Espece', especesSchema)

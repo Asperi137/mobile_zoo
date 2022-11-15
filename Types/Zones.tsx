@@ -1,4 +1,4 @@
-export type Zones = {
-    "_id": string;
-    "nom": string;
+export default interface Zones {
+  _id: string
+  nom: string
 }

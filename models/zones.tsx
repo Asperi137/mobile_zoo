@@ -1,8 +1,9 @@
-import mongoose from 'mongoose'
+import { model, models, Schema } from 'mongoose'
+import Zones from '../Types/Zones'
 
-const zonesSchema = new mongoose.Schema({
+const zonesSchema = new Schema<Zones>({
   _id: { type: String, required: true },
-  nom: { type: String, required: true },
-});
+  nom: { type: String, required: true }
+})
 
-export default  mongoose.model('Zone', zonesSchema);
+export default models.Zone || model<Zones>('Zone', zonesSchema)
