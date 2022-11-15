@@ -3,6 +3,7 @@ import Animaux from '../../../Types/Animaux'
 import AnimalM from '../../../models/animaux'
 import mongooseConnect from '../../../lib/mongooseConnect'
 import ResponseError from '../../../Types/ResponseError'
+import { createAnimal, getAnimaux } from '../../../controllers/animaux'
 
 mongooseConnect()
 
@@ -19,22 +20,13 @@ export default function Handler (
 
   switch (req.method) {
     case 'GET':
-      AnimalM.find()
-        .then(animal => res.status(200).json(animal))
-        .catch(error => res.status(400).json(error))
+      getAnimaux(req, res)
       break
     case 'POST':
-      const animal = new AnimalM({
-        ...req.body
-      })
-      animal
-        .save()
-        .then(() => res.status(201).json({ message: 'Animal ajouté' }))
-        .catch((error: ResponseError) => res.status(400).json(error))
-      console.log(res.statusMessage)
+      createAnimal(req, res)
       break
     default:
-      res.setHeader('Allow', ['GET', 'PUT'])
+      res.setHeader('Allow', ['GET', 'POST'])
       res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }

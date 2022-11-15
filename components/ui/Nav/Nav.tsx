@@ -1,21 +1,15 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
-
-export default function Nav() {
-
-	return (
-		<nav>
-			<ul style={{ display: 'flex', listStyleType: 'none', margin: 0, padding: 0, gap: '1.5em' }}>
-				<li>
-					<Link href='/'>Connection</Link>
-				</li>
-				<li>
-					<Link href='/enclos'>enclos</Link>
-				</li>
-				<li>
-					<Link href='/evenements'>Evenement</Link>
-				</li>
-			</ul>
-		</nav>
-	);
+export default function Nav () {
+  return (
+    <nav>
+      <div className='containerH'>
+        <Link href='/'>Connection</Link>
+        <br />
+        <Link href='/enclos'>enclos</Link>
+        <br />
+        <Link href='/evenements'>Evenement</Link>
+      </div>
+    </nav>
+  )
 }

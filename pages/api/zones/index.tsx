@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import Zones from '../../../Types/Zones'
-import ZoneM from '../../../models/zones'
 import mongooseConnect from '../../../lib/mongooseConnect'
 import ResponseError from '../../../Types/ResponseError'
+import { createZone, getZones } from '../../../controllers/zones'
 
 mongooseConnect()
 
@@ -19,22 +19,13 @@ export default function Handler (
 
   switch (req.method) {
     case 'GET':
-      ZoneM.find()
-        .then(zones => res.status(200).json(zones))
-        .catch(error => res.status(400).json(error))
+      getZones(req, res)
       break
     case 'POST':
-      const zone = new ZoneM({
-        ...req.body
-      })
-      zone
-        .save()
-        .then(() => res.status(201).json({ message: 'Zone ajoutée' }))
-        .catch((error: ResponseError) => res.status(400).json(error))
-      console.log(res.statusMessage)
+      createZone(req, res)
       break
     default:
-      res.setHeader('Allow', ['GET', 'PUT'])
+      res.setHeader('Allow', ['GET', 'POST'])
       res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }

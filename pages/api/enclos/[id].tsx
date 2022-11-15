@@ -1,8 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import Enclos from '../../../Types/Enclos'
-import EnclosM from '../../../models/enclos'
 import mongooseConnect from '../../../lib/mongooseConnect'
 import ResponseError from '../../../Types/ResponseError'
+import {
+  deleteEnclos,
+  getOneEnclos,
+  modifyEnclos
+} from '../../../controllers/enclos'
 
 mongooseConnect()
 
@@ -19,26 +23,17 @@ export default function Handler (
 
   switch (req.method) {
     case 'GET':
-      EnclosM.findOne({ _id: req.query.id })
-        .then(enclos => res.status(200).json(enclos))
-        .catch(error => res.status(404).json(error))
+      getOneEnclos(req, res)
       break
     case 'PUT':
-      EnclosM.updateOne(
-        { _id: req.query.id },
-        { ...req.body, _id: req.query.id }
-      )
-        .then(() => res.status(200).json({ message: 'Enclos modifié' }))
-        .catch(error => res.status(404).json(error))
+      modifyEnclos(req, res)
       break
     case 'DELETE':
-      EnclosM.deleteOne({ _id: req.query.id })
-        .then(() => res.status(200).json({ message: 'Enclos supprimé' }))
-        .catch(error => res.status(404).json(error))
+      deleteEnclos(req, res)
       break
 
     default:
-      res.setHeader('Allow', ['GET', 'PUT'])
+      res.setHeader('Allow', ['GET', 'PUT', 'DELETE'])
       res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }

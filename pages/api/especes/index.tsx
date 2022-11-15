@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import EspeceM from '../../../models/especes'
+
 import mongooseConnect from '../../../lib/mongooseConnect'
 import ResponseError from '../../../Types/ResponseError'
 import Especes from '../../../Types/Especes'
+import { createEspece, getEspeces } from '../../../controllers/especes'
 
 mongooseConnect()
 
@@ -19,22 +20,13 @@ export default function Handler (
 
   switch (req.method) {
     case 'GET':
-      EspeceM.find()
-        .then(espece => res.status(200).json(espece))
-        .catch(error => res.status(400).json(error))
+      getEspeces(req, res)
       break
     case 'POST':
-      const espece = new EspeceM({
-        ...req.body
-      })
-      espece
-        .save()
-        .then(() => res.status(201).json({ message: 'Espece ajoutée' }))
-        .catch((error: ResponseError) => res.status(400).json(error))
-      console.log(res.statusMessage)
+      createEspece(req, res)
       break
     default:
-      res.setHeader('Allow', ['GET', 'PUT'])
+      res.setHeader('Allow', ['GET', 'POST'])
       res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }

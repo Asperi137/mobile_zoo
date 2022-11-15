@@ -16,7 +16,7 @@ export default function Index ({ enclos, zones }: Props): JSX.Element {
             {enclos.map(
               (enclos: Enclos) =>
                 enclos.zone === zone._id && (
-                  <button>
+                  <button key={enclos._id}>
                     <Link href='/enclos/[id]' as={`/enclos/${enclos._id}`}>
                       {`${enclos.nom}`}
                     </Link>

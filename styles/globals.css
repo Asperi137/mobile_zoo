@@ -30,6 +30,7 @@ a {
 }
 
 .containerH {
+  gap: 1.5em;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -59,6 +60,10 @@ button {
   color: white;
   padding: 0.5em;
   margin: 0.5em;
+}
+
+button:hover {
+  color: black;
 }
 
 .btnRetour {

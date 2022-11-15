@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import Zones from '../../../Types/Zones'
-import ZoneM from '../../../models/zones'
 import mongooseConnect from '../../../lib/mongooseConnect'
 import ResponseError from '../../../Types/ResponseError'
+import { deleteZone, getOneZone, modifyZone } from '../../../controllers/zones'
 
 mongooseConnect()
 
@@ -19,23 +19,17 @@ export default function Handler (
 
   switch (req.method) {
     case 'GET':
-      ZoneM.findOne({ _id: req.query.id })
-        .then(zone => res.status(200).json(zone))
-        .catch(error => res.status(404).json(error))
+      getOneZone(req, res)
       break
     case 'PUT':
-      ZoneM.updateOne({ _id: req.query.id }, { ...req.body, _id: req.query.id })
-        .then(() => res.status(200).json({ message: 'Zone modifiée' }))
-        .catch(error => res.status(404).json(error))
+      modifyZone(req, res)
       break
     case 'DELETE':
-      ZoneM.deleteOne({ _id: req.query.id })
-        .then(() => res.status(200).json({ message: 'Zone supprimée' }))
-        .catch(error => res.status(404).json(error))
+      deleteZone(req, res)
       break
 
     default:
-      res.setHeader('Allow', ['GET', 'PUT'])
+      res.setHeader('Allow', ['GET', 'PUT', 'DELETE'])
       res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }

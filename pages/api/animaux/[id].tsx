@@ -1,8 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import Animaux from '../../../Types/Animaux'
-import AnimalM from '../../../models/animaux'
 import mongooseConnect from '../../../lib/mongooseConnect'
 import ResponseError from '../../../Types/ResponseError'
+import {
+  deleteAnimal,
+  getOneAnimal,
+  modifyAnimal
+} from '../../../controllers/animaux'
 
 mongooseConnect()
 
@@ -19,26 +23,16 @@ export default function Handler (
 
   switch (req.method) {
     case 'GET':
-      AnimalM.findOne({ _id: req.query.id })
-        .then(animal => res.status(200).json(animal))
-        .catch(error => res.status(404).json(error))
+      getOneAnimal(req, res)
       break
     case 'PUT':
-      AnimalM.updateOne(
-        { _id: req.query.id },
-        { ...req.body, _id: req.query.id }
-      )
-        .then(() => res.status(200).json({ message: 'Animal modifié' }))
-        .catch(error => res.status(404).json(error))
+      modifyAnimal(req, res)
       break
     case 'DELETE':
-      AnimalM.deleteOne({ _id: req.query.id })
-        .then(() => res.status(200).json({ message: 'Animal supprimé' }))
-        .catch(error => res.status(404).json(error))
+      deleteAnimal(req, res)
       break
-
     default:
-      res.setHeader('Allow', ['GET', 'PUT'])
+      res.setHeader('Allow', ['GET', 'PUT', 'DELETE'])
       res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }
