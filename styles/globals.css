@@ -62,5 +62,5 @@ button {
 }
 
 .btnRetour {
-  max-width: 20em;
+  max-width: fit-content;
 }

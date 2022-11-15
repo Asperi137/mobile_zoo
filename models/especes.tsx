@@ -10,4 +10,4 @@ const especesSchema = new Schema<Especes>({
   enclos: { type: String, required: true }
 })
 
-export default models.Especes || model<Especes>('Espece', especesSchema)
+export default models.EspeceM || model<Especes>('EspeceM', especesSchema)

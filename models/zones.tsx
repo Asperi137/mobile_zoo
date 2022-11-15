@@ -6,4 +6,4 @@ const zonesSchema = new Schema<Zones>({
   nom: { type: String, required: true }
 })
 
-export default models.Zone || model<Zones>('Zone', zonesSchema)
+export default models.ZoneM || model<Zones>('ZoneM', zonesSchema)

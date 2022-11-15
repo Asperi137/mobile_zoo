@@ -9,4 +9,4 @@ const enclosSchema = new Schema<Enclos>({
   superficie: { type: Number, required: true }
 })
 
-export default models.Enclos || model<Enclos>('Enclos', enclosSchema)
+export default models.EnclosM || model<Enclos>('EnclosM', enclosSchema)

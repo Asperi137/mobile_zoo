@@ -11,4 +11,4 @@ const animauxSchema = new Schema<Animaux>({
   observations: { type: String, required: true },
   position: { type: String, required: true }
 })
-export default models.Animal || model<Animaux>('Animal', animauxSchema)
+export default models.AnimalM || model<Animaux>('AnimalM', animauxSchema)

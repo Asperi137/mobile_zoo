@@ -12,7 +12,7 @@ function isSociable (espece: Especes) {
   else return 'non sociable'
 }
 function isDanger (espece: Especes) {
-  if (espece.sociable) return 'dangereux'
+  if (espece.dangereux) return 'dangereux'
   else return 'inoffensif'
 }
 
