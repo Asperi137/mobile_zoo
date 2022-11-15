@@ -24,3 +24,43 @@ a {
     background: black;
   }
 }
+
+.alignCenter {
+  text-align: center;
+}
+
+.containerH {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.containerV {
+  margin: 0.5em;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.bordered {
+  border: solid 1px teal;
+}
+.description {
+  margin: 0em;
+  padding: 0.5em;
+  background-color: teal;
+  color: white;
+}
+
+button {
+  box-shadow: 3px 3px 3px rgb(0, 47, 47);
+  border: 0;
+  background-color: teal;
+  color: white;
+  padding: 0.5em;
+  margin: 0.5em;
+}
+
+.btnRetour {
+  max-width: 20em;
+}

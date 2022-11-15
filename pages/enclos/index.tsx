@@ -8,28 +8,25 @@ const API_adr = process.env.API_adr
 
 export default function Index ({ enclos, zones }: Props): JSX.Element {
   return (
-    <ul>
+    <div className='containerH'>
       {zones.map((zone: Zones) => (
-        <ul key={zone._id}>
-          <li>
-            {' '}
-            {`zone ${zone._id}`}
-            <ul>
-              {enclos.map(
-                (enclos: Enclos) =>
-                  enclos.zone === zone._id && (
-                    <li key={enclos._id}>
-                      <Link href='/enclos/[id]' as={`/enclos/${enclos._id}`}>
-                        {`enclos ${enclos._id}`}
-                      </Link>
-                    </li>
-                  )
-              )}
-            </ul>
-          </li>
-        </ul>
+        <div key={zone._id} className='containerV , alignCenter , bordered'>
+          <h2 className='description'>{`${zone.nom}`}</h2>
+          <div className='containerV'>
+            {enclos.map(
+              (enclos: Enclos) =>
+                enclos.zone === zone._id && (
+                  <button>
+                    <Link href='/enclos/[id]' as={`/enclos/${enclos._id}`}>
+                      {`${enclos.nom}`}
+                    </Link>
+                  </button>
+                )
+            )}
+          </div>
+        </div>
       ))}
-    </ul>
+    </div>
   )
 }
 

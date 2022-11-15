@@ -8,28 +8,27 @@ type Props = { enclos: Enclos[]; especes: Especes[] }
 
 export default function Index ({ enclos, especes }: Props): JSX.Element {
   return (
-    <ul>
+    <div className='containerH'>
       {enclos.map((enclos: Enclos) => (
-        <ul key={enclos._id}>
-          <li>
-            {' '}
-            {`enclos ${enclos._id}`}
-            <ul>
-              {especes.map(
-                (especes: Especes) =>
-                  especes.enclos === enclos._id && (
-                    <li key={especes._id}>
-                      <Link href='/especes/[id]' as={`/especes/${especes._id}`}>
-                        {`especes ${especes._id}`}
-                      </Link>
-                    </li>
-                  )
-              )}
-            </ul>
-          </li>
-        </ul>
-      ))}
-    </ul>
+        <div key={enclos._id} className='containerV , alignCenter , bordered'>
+          <Link href='/enclos/[id]' as={`/enclos/${enclos._id}`}>
+            <h2 className='description'>{`${enclos.nom}`}</h2>
+          </Link>
+          <div className='containerV'>
+            {especes.map(
+              (especes: Especes) =>
+                especes.enclos === enclos._id && (
+                  <button>
+                    <Link href='/especes/[id]' as={`/especes/${especes._id}`}>
+                      {`especes ${especes._id}`}
+                    </Link>
+                  </button>
+                )
+            )}
+          </div>
+        </div>
+      ))}{' '}
+    </div>
   )
 }
 
