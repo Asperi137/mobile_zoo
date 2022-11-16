@@ -22,7 +22,7 @@ export function getEnclos (
 ) {
   EnclosM.find()
     .then(enclos => res.status(200).json(enclos))
-    .catch(error => res.status(400).json(error))
+    .catch((error: ResponseError) => res.status(404).json(error))
 }
 
 export function modifyEnclos (
@@ -30,8 +30,8 @@ export function modifyEnclos (
   res: NextApiResponse<Enclos | ResponseError>
 ) {
   EnclosM.updateOne({ _id: req.query.id }, { ...req.body, _id: req.query.id })
-    .then(() => res.status(200).json({ message: 'Enclos modifié' }))
-    .catch(error => res.status(404).json(error))
+    .then(() => res.status(202).json({ message: 'Enclos modifié' }))
+    .catch((error: ResponseError) => res.status(400).json(error))
 }
 
 export function deleteEnclos (
@@ -39,8 +39,8 @@ export function deleteEnclos (
   res: NextApiResponse<Enclos | ResponseError>
 ) {
   EnclosM.deleteOne({ _id: req.query.id })
-    .then(() => res.status(200).json({ message: 'Enclos supprimé' }))
-    .catch(error => res.status(404).json(error))
+    .then(() => res.status(410).json({ message: 'Enclos supprimé' }))
+    .catch((error: ResponseError) => res.status(404).json(error))
 }
 
 export function getOneEnclos (
@@ -49,5 +49,5 @@ export function getOneEnclos (
 ) {
   EnclosM.findOne({ _id: req.query.id })
     .then(enclos => res.status(200).json(enclos))
-    .catch(error => res.status(404).json(error))
+    .catch((error: ResponseError) => res.status(404).json(error))
 }

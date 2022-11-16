@@ -22,8 +22,8 @@ export function modifyZone (
   res: NextApiResponse<Zones | ResponseError>
 ) {
   ZoneM.updateOne({ _id: req.query.id }, { ...req.body, _id: req.query.id })
-    .then(() => res.status(200).json({ message: 'Zone modifiée' }))
-    .catch(error => res.status(404).json(error))
+    .then(() => res.status(202).json({ message: 'Zone modifiée' }))
+    .catch((error: ResponseError) => res.status(404).json(error))
 }
 
 export function deleteZone (
@@ -31,8 +31,8 @@ export function deleteZone (
   res: NextApiResponse<Zones | ResponseError>
 ) {
   ZoneM.deleteOne({ _id: req.query.id })
-    .then(() => res.status(200).json({ message: 'Zone supprimée' }))
-    .catch(error => res.status(404).json(error))
+    .then(() => res.status(410).json({ message: 'Zone supprimée' }))
+    .catch((error: ResponseError) => res.status(404).json(error))
 }
 
 export function getOneZone (
@@ -41,7 +41,7 @@ export function getOneZone (
 ) {
   ZoneM.findOne({ _id: req.query.id })
     .then(zone => res.status(200).json(zone))
-    .catch(error => res.status(404).json(error))
+    .catch((error: ResponseError) => res.status(404).json(error))
 }
 
 export function getZones (
@@ -50,5 +50,5 @@ export function getZones (
 ) {
   ZoneM.find()
     .then(zones => res.status(200).json(zones))
-    .catch(error => res.status(400).json(error))
+    .catch((error: ResponseError) => res.status(400).json(error))
 }

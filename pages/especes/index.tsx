@@ -20,7 +20,7 @@ export default function Index ({ enclos, especes }: Props): JSX.Element {
                 especes.enclos === enclos._id && (
                   <button key={especes._id}>
                     <Link href='/especes/[id]' as={`/especes/${especes._id}`}>
-                      {`especes ${especes._id}`}
+                      {` ${especes.nom}`}
                     </Link>
                   </button>
                 )

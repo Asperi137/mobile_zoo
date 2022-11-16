@@ -22,8 +22,8 @@ export function modifyAnimal (
   res: NextApiResponse<Animaux | ResponseError>
 ) {
   AnimalM.updateOne({ _id: req.query.id }, { ...req.body, _id: req.query.id })
-    .then(() => res.status(200).json({ message: 'Animal modifié' }))
-    .catch(error => res.status(404).json(error))
+    .then(() => res.status(202).json({ message: 'Animal modifié' }))
+    .catch((error: ResponseError) => res.status(400).json(error))
 }
 
 export function deleteAnimal (
@@ -31,8 +31,8 @@ export function deleteAnimal (
   res: NextApiResponse<Animaux | ResponseError>
 ) {
   AnimalM.deleteOne({ _id: req.query.id })
-    .then(() => res.status(200).json({ message: 'Animal supprimé' }))
-    .catch(error => res.status(404).json(error))
+    .then(() => res.status(410).json({ message: 'Animal supprimé' }))
+    .catch((error: ResponseError) => res.status(404).json(error))
 }
 
 export function getOneAnimal (
@@ -41,7 +41,7 @@ export function getOneAnimal (
 ) {
   AnimalM.findOne({ _id: req.query.id })
     .then(animal => res.status(200).json(animal))
-    .catch(error => res.status(404).json(error))
+    .catch((error: ResponseError) => res.status(404).json(error))
 }
 
 export function getAnimaux (
@@ -50,5 +50,5 @@ export function getAnimaux (
 ) {
   AnimalM.find()
     .then(animal => res.status(200).json(animal))
-    .catch(error => res.status(400).json(error))
+    .catch((error: ResponseError) => res.status(404).json(error))
 }

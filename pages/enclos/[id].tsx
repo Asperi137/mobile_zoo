@@ -1,5 +1,6 @@
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import Link from 'next/link'
+import InfoEnclos from '../../components/ui/barreInfo/InfoEnclos'
 import Enclos from '../../Types/Enclos'
 import Especes from '../../Types/Especes'
 import Zones from '../../Types/Zones'
@@ -19,16 +20,7 @@ export default function Index ({
           {`retour à la liste des enclos `}
         </Link>
       </button>
-      <div className='containerV , description , bordered'>
-        {`${enclos.nom}`}
-        <br />
-        {`${zone.nom}`}
-        <br />
-        {`superficie : ${enclos.superficie} m²`}
-        <br />
-        {`${enclos.coordonnées}`}
-        <br />
-      </div>
+      <InfoEnclos enclos={enclos} zone={zone} />
       <div className='containerH'>
         {especeslst.map(
           (especes: Especes) =>
@@ -36,7 +28,7 @@ export default function Index ({
               <div className='containerV , bordered' key={especes._id}>
                 <button>
                   <Link href='/especes/[id]' as={`/especes/${especes._id}`}>
-                    {`${especes._id}`}
+                    {`${especes.nom}`}
                   </Link>
                 </button>
               </div>

@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import Animaux from '../../../Types/Animaux'
-import AnimalM from '../../../models/animaux'
 import mongooseConnect from '../../../lib/mongooseConnect'
 import ResponseError from '../../../Types/ResponseError'
 import { createAnimal, getAnimaux } from '../../../controllers/animaux'
