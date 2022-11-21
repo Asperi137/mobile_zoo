@@ -1,11 +1,12 @@
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import Link from 'next/link'
-import Animaux from '../../Types/Animaux'
-import Especes from '../../Types/Especes'
-import Enclos from '../../Types/Enclos'
-import Zones from '../../Types/Zones'
-import InfoEspece from '../../components/ui/barreInfo/InfoEspece'
-import InfoEnclos from '../../components/ui/barreInfo/InfoEnclos'
+import Animaux from 'Types/Animaux'
+import Especes from 'Types/Especes'
+import Enclos from 'Types/Enclos'
+import Zones from 'Types/Zones'
+import InfoEspece from 'components/ui/barreInfo/InfoEspece'
+import InfoEnclos from 'components/ui/barreInfo/InfoEnclos'
+import IsConnected from 'lib/isConnected'
 
 const API_adr = process.env.API_adr
 
@@ -24,28 +25,40 @@ export default function Index ({
 }: props): JSX.Element {
   return (
     <div className='containerV'>
-      <button className='btnRetour'>
-        <Link href={`/enclos/${espece.enclos}`} as={`/enclos/${espece.enclos}`}>
-          {`retour à l'enclos : ${enclos.nom} `}
-        </Link>
-      </button>
-      <InfoEnclos enclos={enclos} zone={zone} />
-      <InfoEspece enclos={enclos} espece={espece} />
+      {IsConnected() && (
+        <>
+          <button className='btnRetour'>
+            <Link
+              href={`/enclos/${espece.enclos}`}
+              as={`/enclos/${espece.enclos}`}
+            >
+              {`retour à l'enclos : ${enclos.nom} `}
+            </Link>
+          </button>
+          <InfoEnclos enclos={enclos} zone={zone} />
+          <InfoEspece enclos={enclos} espece={espece} />
 
-      <div className='containerH'>
-        {animaux.map(
-          (animal: Animaux) =>
-            animal.espece === espece._id && (
-              <div className='containerV , bordered' key={animal._id}>
-                <button>
-                  <Link href='/animaux/[id]' as={`/animaux/${animal._id}`}>
-                    {`${animal.nom}`}
-                  </Link>
-                </button>
-              </div>
-            )
-        )}
-      </div>
+          <div className='containerH'>
+            {animaux.map(
+              (animal: Animaux) =>
+                animal.espece === espece._id && (
+                  <div className='containerV , bordered' key={animal._id}>
+                    <button>
+                      <Link href='/animaux/[id]' as={`/animaux/${animal._id}`}>
+                        {`${animal.nom}`}
+                      </Link>
+                    </button>
+                  </div>
+                )
+            )}
+          </div>
+        </>
+      )}
+      {!IsConnected() && (
+        <button className='btnRetour'>
+          <Link href='/'>Veillez vous connecter</Link>
+        </button>
+      )}
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next/types'
-import ResponseError from '../Types/ResponseError'
-import Animaux from '../Types/Animaux'
-import AnimalM from '../models/animaux'
+import ResponseError from 'Types/ResponseError'
+import Animaux from 'Types/Animaux'
+import AnimalM from 'models/animaux'
 
 export function createAnimal (
   req: NextApiRequest,

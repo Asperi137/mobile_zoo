@@ -1,5 +1,5 @@
-import classes from './Footer.module.css';
+import classes from './Footer.module.css'
 
-export default function Footer() {
-	return <footer className={`container ${classes.Footer}`}>© Jerome</footer>;
+export default function Footer () {
+  return <footer className={`container ${classes.Footer}`}>© Jerome</footer>
 }

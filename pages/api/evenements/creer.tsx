@@ -1,14 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import User from 'Types/User'
 import mongooseConnect from 'lib/mongooseConnect'
 import ResponseError from 'Types/ResponseError'
-import { login } from 'controllers/user'
+import Evenements from 'Types/Evenements'
+import { createEvenement } from 'controllers/evenements'
 
 mongooseConnect()
 
-export default async function Handler (
+export default function Handler (
   req: NextApiRequest,
-  res: NextApiResponse<User | ResponseError>
+  res: NextApiResponse<Evenements | ResponseError>
 ) {
   return new Promise((resolve, reject) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -19,7 +19,7 @@ export default async function Handler (
     res.setHeader('Access-Control-Allow-Methods', ' POST')
 
     if (req.method === 'POST') {
-      login(req, res)
+      createEvenement(req, res)
     } else {
       res.setHeader('Allow', ['POST'])
       res.status(405).end(`Method ${req.method} Not Allowed`)

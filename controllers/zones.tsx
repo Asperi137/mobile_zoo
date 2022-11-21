@@ -1,15 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next/types'
-import ResponseError from '../Types/ResponseError'
-import Zones from '../Types/Zones'
-import ZoneM from '../models/zones'
+import ResponseError from 'Types/ResponseError'
+import Zones from 'Types/Zones'
+import ZoneM from 'models/zones'
 
 export function createZone (
   req: NextApiRequest,
   res: NextApiResponse<Zones[] | Zones | ResponseError>
 ) {
-  const zone = new ZoneM({
-    ...req.body
-  })
+  const zone = new ZoneM({ ...req.body })
   zone
     .save()
     .then(() => res.status(201).json({ message: 'Zone ajoutée' }))

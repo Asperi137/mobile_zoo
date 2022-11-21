@@ -1,6 +1,6 @@
 import classes from './barreInfo.module.css'
-import Enclos from '../../../Types/Enclos'
-import Zones from '../../../Types/Zones'
+import Enclos from 'Types/Enclos'
+import Zones from 'Types/Zones'
 
 type props = { enclos: Enclos; zone: Zones }
 

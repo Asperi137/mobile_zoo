@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next/types'
-import Especes from '../Types/Especes'
-import ResponseError from '../Types/ResponseError'
-import EspeceM from '../models/especes'
+import Especes from 'Types/Especes'
+import ResponseError from 'Types/ResponseError'
+import EspeceM from 'models/especes'
 
 export function createEspece (
   req: NextApiRequest,

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next/types'
 import ResponseError from '../Types/ResponseError'
-import Enclos from '../Types/Enclos'
-import EnclosM from '../models/enclos'
+import Enclos from 'Types/Enclos'
+import EnclosM from 'models/enclos'
 
 export function creatEnclos (
   req: NextApiRequest,

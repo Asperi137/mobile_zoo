@@ -69,3 +69,7 @@ button:hover {
 .btnRetour {
   max-width: fit-content;
 }
+
+form {
+  text-align: center;
+}

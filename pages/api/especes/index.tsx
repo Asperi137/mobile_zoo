@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import mongooseConnect from '../../../lib/mongooseConnect'
-import ResponseError from '../../../Types/ResponseError'
-import Especes from '../../../Types/Especes'
-import { createEspece, getEspeces } from '../../../controllers/especes'
+import mongooseConnect from 'lib/mongooseConnect'
+import ResponseError from 'Types/ResponseError'
+import Especes from 'Types/Especes'
+import { createEspece, getEspeces } from 'controllers/especes'
 
 mongooseConnect()
 
@@ -11,22 +11,24 @@ export default function Handler (
   req: NextApiRequest,
   res: NextApiResponse<Especes[] | Especes | ResponseError>
 ) {
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
-  )
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
+  return new Promise((resolve, reject) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
+    )
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
 
-  switch (req.method) {
-    case 'GET':
-      getEspeces(req, res)
-      break
-    case 'POST':
-      createEspece(req, res)
-      break
-    default:
-      res.setHeader('Allow', ['GET', 'POST'])
-      res.status(405).end(`Method ${req.method} Not Allowed`)
-  }
+    switch (req.method) {
+      case 'GET':
+        getEspeces(req, res)
+        break
+      case 'POST':
+        createEspece(req, res)
+        break
+      default:
+        res.setHeader('Allow', ['GET', 'POST'])
+        res.status(405).end(`Method ${req.method} Not Allowed`)
+    }
+  })
 }
