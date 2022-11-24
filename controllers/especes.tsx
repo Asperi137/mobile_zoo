@@ -79,7 +79,7 @@ export async function agirSurEspeces (
     espece: req.body.espece,
     enclos: enclos._id,
     zone: enclos.zone,
-    observation: req.body.observation
+    observations: req.body.observations
   })
 
   evenement

@@ -7,7 +7,7 @@ import Zones from 'Types/Zones'
 import InfoEspece from 'components/ui/barreInfo/InfoEspece'
 import InfoEnclos from 'components/ui/barreInfo/InfoEnclos'
 import IsConnected from 'lib/isConnected'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { UserContext } from 'lib/UserContext'
 
 const API_adr = process.env.API_adr
@@ -29,10 +29,14 @@ export default function Index ({
 }: props): JSX.Element {
   const { role } = useContext(UserContext)
 
-  function nourrir () {
+  const [verif, setverif] = useState('')
+
+  function nourrir (event: any) {
+    event.preventDefault()
     const data = {
       espece: espece._id,
-      createur: role
+      createur: role,
+      observations: event.target.observations.value
     }
     const JSONdata = JSON.stringify(data)
     const options = {
@@ -43,12 +47,15 @@ export default function Index ({
       body: JSONdata
     }
     fetch(`${API_adr}especes/nourrir`, options)
+    setverif('')
   }
 
-  function stimuler () {
+  function stimuler (event: any) {
+    event.preventDefault()
     const data = {
       espece: espece._id,
-      createur: role
+      createur: role,
+      observations: event.target.observations.value
     }
     const JSONdata = JSON.stringify(data)
     const options = {
@@ -59,6 +66,7 @@ export default function Index ({
       body: JSONdata
     }
     fetch(`${API_adr}especes/stimuler`, options)
+    setverif('')
   }
 
   return (
@@ -75,8 +83,36 @@ export default function Index ({
           </button>
           <div className='containerH'>
             <div className='containerV'>
-              <button onClick={nourrir}>Nourrir</button>
-              <button onClick={stimuler}>Stimuler</button>
+              {!verif && (
+                <button onClick={() => setverif('nourrissage')}>Nourrir</button>
+              )}
+              {verif === 'nourrissage' && (
+                <form className='containerV' onSubmit={nourrir} method='POST'>
+                  <input
+                    type='text'
+                    id='observations'
+                    name='observations'
+                    placeholder='observations nourrissage'
+                  />
+                  <br />
+                  <button type='submit'>Nourrir</button>
+                </form>
+              )}
+              {!verif && (
+                <button onClick={() => setverif('stimuler')}>Stimuler</button>
+              )}
+              {verif === 'stimuler' && (
+                <form className='containerV' onSubmit={stimuler} method='POST'>
+                  <input
+                    type='text'
+                    id='observations'
+                    name='observations'
+                    placeholder='observations stimulation'
+                  />
+                  <br />
+                  <button type='submit'>stimuler</button>
+                </form>
+              )}
             </div>
             <InfoEnclos enclos={enclos} zone={zone} />
             <InfoEspece enclos={enclos} espece={espece} />
