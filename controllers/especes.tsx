@@ -20,7 +20,6 @@ export function createEspece (
     .save()
     .then(() => res.status(201).json({ message: 'Espece ajoutée' }))
     .catch((error: ResponseError) => res.status(400).json(error))
-  console.log(res.statusMessage)
 }
 
 export function modifyEspece (
@@ -65,6 +64,7 @@ export async function agirSurEspeces (
   res: NextApiResponse<Evenements | ResponseError>
 ) {
   const date = Date.now()
+
   const espece: Especes = await fetch(
     `${API_adr}especes/${req.body.espece}`
   ).then(res => res.json())
@@ -78,7 +78,8 @@ export async function agirSurEspeces (
     type: action,
     espece: req.body.espece,
     enclos: enclos._id,
-    zone: enclos.zone
+    zone: enclos.zone,
+    observation: req.body.observation
   })
 
   evenement

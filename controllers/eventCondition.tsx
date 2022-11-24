@@ -36,5 +36,11 @@ export async function getEventsCible (
         .catch((error: ResponseError) => res.status(404).json(error))
       break
     }
+    case 'type': {
+      EvenementsM.find({ type: req.query.id })
+        .then(evenement => res.status(200).json(evenement))
+        .catch((error: ResponseError) => res.status(404).json(error))
+      break
+    }
   }
 }

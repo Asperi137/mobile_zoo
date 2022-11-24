@@ -2,6 +2,10 @@ import { NextApiRequest, NextApiResponse } from 'next/types'
 import ResponseError from '../Types/ResponseError'
 import Enclos from 'Types/Enclos'
 import EnclosM from 'models/enclos'
+import EvenementsM from 'models/evenements'
+import Evenements from 'Types/Evenements'
+
+const API_adr = process.env.API_adr
 
 export function creatEnclos (
   req: NextApiRequest,
@@ -50,4 +54,32 @@ export function getOneEnclos (
   EnclosM.findOne({ _id: req.query.id })
     .then(enclos => res.status(200).json(enclos))
     .catch((error: ResponseError) => res.status(404).json(error))
+}
+
+export async function agirSurEnclos (
+  action: string,
+  req: NextApiRequest,
+  res: NextApiResponse<Evenements | ResponseError>
+) {
+  const date = Date.now()
+
+  const enclos: Enclos = await fetch(
+    `${API_adr}enclos/${req.body.enclos}`
+  ).then(res => res.json())
+
+  console.log(enclos)
+
+  const evenement = new EvenementsM({
+    _id: `${date}_${action}_${req.body.enclos}`,
+    createur: req.body.createur,
+    type: action,
+    enclos: req.body.enclos,
+    zone: enclos.zone,
+    observations: req.body.observations
+  })
+
+  evenement
+    .save()
+    .then(() => res.status(201).json({ message: `${action} ajoutée` }))
+    .catch((error: ResponseError) => res.status(400).json(error))
 }

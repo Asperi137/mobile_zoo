@@ -1,7 +1,7 @@
 import IsConnected from 'lib/isConnected'
 import Link from 'next/link'
 import Evenements from 'Types/Evenements'
-import { MouseEvent, useState } from 'react'
+import { useState } from 'react'
 import Especes from 'Types/Especes'
 import Enclos from 'Types/Enclos'
 import Animaux from 'Types/Animaux'
@@ -29,66 +29,52 @@ export default function Index ({
   Type_evenements,
   API_adr
 }: Props) {
-  const [affichage, setAffichage] = useState<Evenements[]>([])
+  const [affichage, setAffichage] = useState<Evenements[]>(evenements)
   const [choix, setChoix] = useState<string>('tout')
   const [choixT, setChoixT] = useState<string>('tout')
 
   async function filtrage (): Promise<void> {
-    switch (choixT) {
-      case 'tout': {
-        setAffichage(
-          await fetch(`${API_adr}evenements`).then(res => res.json())
-        )
-        break
-      }
-      case 'zones': {
-        setAffichage(
-          await fetch(`${API_adr}evenements/${choix}/${choix}`).then(res =>
-            res.json()
-          )
-        )
-        break
-      }
-      case 'enclos': {
-        setAffichage(
-          await fetch(`${API_adr}evenements/${choixT}/${choix}`).then(res =>
-            res.json()
-          )
-        )
-        break
-      }
-      case 'especes': {
-        setAffichage(
-          await fetch(`${API_adr}evenements/${choixT}/${choix}`).then(res =>
-            res.json()
-          )
-        )
-        break
-      }
-      case 'animaux': {
-        setAffichage(
-          await fetch(`${API_adr}evenements/${choixT}/${choix}`).then(res =>
-            res.json()
-          )
-        )
-        break
-      }
+    if (choixT === 'tout') {
+      setAffichage(evenements)
+    } else if (
+      choixT === 'type' ||
+      choixT === 'zones' ||
+      choixT === 'enclos' ||
+      choixT === 'especes' ||
+      choixT === 'animaux'
+    ) {
+      const resu = await fetch(`${API_adr}evenements/${choixT}/${choix}`).then(
+        res => res.json()
+      )
+
+      setAffichage(resu)
     }
   }
 
   return (
     <>
-      {
-        /* IsConnected() &&  */ <>
+      {IsConnected() && (
+        <>
           <div className='alignCenter'>
-            <h2>Tableaux des evenements : {choix}</h2>
+            <h2>
+              Tableaux des evenements :{choixT} {choix}
+            </h2>
           </div>
-          <div>
+          <div className='containerH, alignCenter '>
+            Filtrage :
+            <button
+              onClick={() => {
+                setChoixT('tout')
+                filtrage()
+              }}
+            >
+              TOUT
+            </button>
             <button onClick={() => setChoixT('type')}>Type</button>
             <button onClick={() => setChoixT('zones')}>Zones</button>
             <button onClick={() => setChoixT('enclos')}>Enclos</button>
             <button onClick={() => setChoixT('especes')}>Especes</button>
-            <button onClick={() => setChoixT('animaux')}>animal</button>
+            <button onClick={() => setChoixT('animaux')}>Animaux</button>
           </div>
           <div className='containerH , bordered'>
             {choixT === 'type' &&
@@ -104,7 +90,7 @@ export default function Index ({
                   </div>
                 </div>
               ))}
-            {choixT === 'zone' &&
+            {choixT === 'zones' &&
               zones.map(zone => (
                 <div key={zone._id} className='containerV '>
                   <div
@@ -143,7 +129,7 @@ export default function Index ({
                   </div>
                 </div>
               ))}
-            {choixT === 'animal' &&
+            {choixT === 'animaux' &&
               animaux.map(animal => (
                 <div key={animal._id} className='containerV '>
                   <div
@@ -204,8 +190,12 @@ export default function Index ({
             </tbody>
           </table>
         </>
-      }
-      <br />
+      )}
+      {!IsConnected() && (
+        <button className='btnRetour'>
+          <Link href='/'>Veillez vous connecter</Link>
+        </button>
+      )}
     </>
   )
 }

@@ -19,7 +19,7 @@ export default function FormConnect () {
     event.preventDefault()
     if (!event.target.login.value || !event.target.password.value) {
       alert('Veuiller entrer un login et un mot de passe')
-      setRole('')
+      deconection(event)
     } else {
       const data = {
         login: event.target.login.value,
