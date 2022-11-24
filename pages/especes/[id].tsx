@@ -7,6 +7,8 @@ import Zones from 'Types/Zones'
 import InfoEspece from 'components/ui/barreInfo/InfoEspece'
 import InfoEnclos from 'components/ui/barreInfo/InfoEnclos'
 import IsConnected from 'lib/isConnected'
+import { useContext } from 'react'
+import { UserContext } from 'lib/UserContext'
 
 const API_adr = process.env.API_adr
 
@@ -15,14 +17,50 @@ type props = {
   espece: Especes
   enclos: Enclos
   zone: Zones
+  API_adr: string
 }
 
 export default function Index ({
   animaux,
   espece,
   enclos,
-  zone
+  zone,
+  API_adr
 }: props): JSX.Element {
+  const { role } = useContext(UserContext)
+
+  function nourrir () {
+    const data = {
+      espece: espece._id,
+      createur: role
+    }
+    const JSONdata = JSON.stringify(data)
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+    fetch(`${API_adr}especes/nourrir`, options)
+  }
+
+  function stimuler () {
+    const data = {
+      espece: espece._id,
+      createur: role
+    }
+    const JSONdata = JSON.stringify(data)
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSONdata
+    }
+    fetch(`${API_adr}especes/stimuler`, options)
+  }
+
   return (
     <div className='containerV'>
       {IsConnected() && (
@@ -35,9 +73,14 @@ export default function Index ({
               {`retour à l'enclos : ${enclos.nom} `}
             </Link>
           </button>
-          <InfoEnclos enclos={enclos} zone={zone} />
-          <InfoEspece enclos={enclos} espece={espece} />
-
+          <div className='containerH'>
+            <div className='containerV'>
+              <button onClick={nourrir}>Nourrir</button>
+              <button onClick={stimuler}>Stimuler</button>
+            </div>
+            <InfoEnclos enclos={enclos} zone={zone} />
+            <InfoEspece enclos={enclos} espece={espece} />
+          </div>
           <div className='containerH'>
             {animaux.map(
               (animal: Animaux) =>
@@ -70,7 +113,7 @@ export async function getServerSideProps ({ params }: Params) {
   const enclos: Enclos = await fetch(`${API_adr}enclos/${espece.enclos}`).then(
     res => res.json()
   )
-  const zone = await fetch(`${API_adr}zones/${enclos.zone}`).then(res =>
+  const zone: Zones = await fetch(`${API_adr}zones/${enclos.zone}`).then(res =>
     res.json()
   )
   const animaux = await fetch(`${API_adr}animaux`).then(res => res.json())
@@ -79,7 +122,8 @@ export async function getServerSideProps ({ params }: Params) {
       animaux,
       espece,
       enclos,
-      zone
+      zone,
+      API_adr
     }
   }
 }

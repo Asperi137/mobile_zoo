@@ -1,6 +1,6 @@
 import Header from 'components/ui/Header/Header'
 import Footer from 'components/ui/Footer/Footer'
-import { ReactElement, useState } from 'react'
+import { ReactElement } from 'react'
 
 export default function Layout (props: {
   children: ReactElement | null | undefined

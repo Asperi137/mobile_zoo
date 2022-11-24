@@ -4,6 +4,8 @@ export default interface Evenements {
   animal: string
   espece: string
   enclos: string
+  zone: string
   type: string
   observations: string
+  createdAt: Date
 }

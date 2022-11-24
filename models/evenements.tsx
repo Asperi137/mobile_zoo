@@ -9,8 +9,10 @@ const evenementSchema = new Schema<Evenements>(
     animal: { type: String },
     espece: { type: String },
     enclos: { type: String },
+    zone: { type: String },
     type: { type: String, required: true },
-    observations: { type: String }
+    observations: { type: String },
+    createdAt: { type: Date }
   },
   { timestamps: true }
 )

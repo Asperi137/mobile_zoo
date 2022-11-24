@@ -73,3 +73,27 @@ button:hover {
 form {
   text-align: center;
 }
+
+table {
+  background-color: teal;
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid teal;
+}
+thead th {
+  background-color: teal;
+  border: 1px solid black;
+}
+tbody tr:nth-child(odd) {
+  background-color: gainsboro;
+}
+
+tbody tr:nth-child(even) {
+  background-color: white;
+}
+
+th,
+td {
+  padding: 0.5em;
+  border: 1px solid teal;
+}

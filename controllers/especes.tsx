@@ -2,6 +2,12 @@ import { NextApiRequest, NextApiResponse } from 'next/types'
 import Especes from 'Types/Especes'
 import ResponseError from 'Types/ResponseError'
 import EspeceM from 'models/especes'
+import EvenementsM from 'models/evenements'
+import Evenements from 'Types/Evenements'
+import Zones from 'Types/Zones'
+import Enclos from 'Types/Enclos'
+
+const API_adr = process.env.API_adr
 
 export function createEspece (
   req: NextApiRequest,
@@ -50,5 +56,33 @@ export function getEspeces (
 ) {
   EspeceM.find()
     .then(espece => res.status(200).json(espece))
+    .catch((error: ResponseError) => res.status(400).json(error))
+}
+
+export async function agirSurEspeces (
+  action: string,
+  req: NextApiRequest,
+  res: NextApiResponse<Evenements | ResponseError>
+) {
+  const date = Date.now()
+  const espece: Especes = await fetch(
+    `${API_adr}especes/${req.body.espece}`
+  ).then(res => res.json())
+  const enclos: Enclos = await fetch(`${API_adr}enclos/${espece.enclos}`).then(
+    res => res.json()
+  )
+
+  const evenement = new EvenementsM({
+    _id: `${date}_${action}_${req.body.espece}`,
+    createur: req.body.createur,
+    type: action,
+    espece: req.body.espece,
+    enclos: enclos._id,
+    zone: enclos.zone
+  })
+
+  evenement
+    .save()
+    .then(() => res.status(201).json({ message: `${action} ajoutée` }))
     .catch((error: ResponseError) => res.status(400).json(error))
 }

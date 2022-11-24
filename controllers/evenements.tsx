@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next/types'
 import Evenements from 'Types/Evenements'
 import ResponseError from 'Types/ResponseError'
 import EvenementsM from 'models/evenements'
+import Type_evenementsM from 'models/type_evenements'
+import Type_evenements from 'Types/Type_evenements'
 
 export function createEvenement (
   req: NextApiRequest,
@@ -53,5 +55,14 @@ export function getEvenements (
 ) {
   EvenementsM.find()
     .then(evenements => res.status(200).json(evenements))
+    .catch((error: ResponseError) => res.status(400).json(error))
+}
+
+export function getType_evenements (
+  req: NextApiRequest,
+  res: NextApiResponse<Type_evenements[] | Type_evenements | ResponseError>
+) {
+  Type_evenementsM.find()
+    .then(Type_evenements => res.status(200).json(Type_evenements))
     .catch((error: ResponseError) => res.status(400).json(error))
 }
