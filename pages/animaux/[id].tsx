@@ -7,15 +7,23 @@ import Zones from 'Types/Zones'
 import InfoEspece from 'components/ui/barreInfo/InfoEspece'
 import InfoEnclos from 'components/ui/barreInfo/InfoEnclos'
 import IsConnected from 'lib/isConnected'
+import BoutonAction from 'components/ui/boutonAction/BoutonAction'
 const API_adr = process.env.API_adr
 
-type props = { animaux: Animaux; espece: Especes; enclos: Enclos; zone: Zones }
+type props = {
+  animal: Animaux
+  espece: Especes
+  enclos: Enclos
+  zone: Zones
+  API_adr: string
+}
 
 export default function Index ({
-  animaux,
+  animal,
   espece,
   enclos,
-  zone
+  zone,
+  API_adr
 }: props): JSX.Element {
   return (
     <div className='containerV'>
@@ -26,9 +34,16 @@ export default function Index ({
               {`retour à l'especes : ${espece.nom} `}
             </Link>
           </button>
+          {(IsConnected() === 'veterinaire' || IsConnected() === 'admin') && (
+            <BoutonAction
+              cible={animal._id}
+              action={'soigner'}
+              API_adr={API_adr}
+            />
+          )}
           <InfoEnclos enclos={enclos} zone={zone} />
           <InfoEspece enclos={enclos} espece={espece} />
-          {animaux.nom}
+          {animal.nom}
         </>
       )}
       {!IsConnected() && (
@@ -41,10 +56,10 @@ export default function Index ({
 }
 
 export async function getServerSideProps ({ params }: Params) {
-  const animaux = await fetch(`${API_adr}animaux/${params.id}`).then(res =>
+  const animal = await fetch(`${API_adr}animaux/${params.id}`).then(res =>
     res.json()
   )
-  const espece = await fetch(`${API_adr}especes/${animaux.espece}`).then(res =>
+  const espece = await fetch(`${API_adr}especes/${animal.espece}`).then(res =>
     res.json()
   )
   const enclos = await fetch(`${API_adr}enclos/${espece.enclos}`).then(res =>
@@ -56,10 +71,11 @@ export async function getServerSideProps ({ params }: Params) {
 
   return {
     props: {
-      animaux,
+      animal,
       espece,
       enclos,
-      zone
+      zone,
+      API_adr
     }
   }
 }

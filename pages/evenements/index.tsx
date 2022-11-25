@@ -34,21 +34,19 @@ export default function Index ({
   const [choixT, setChoixT] = useState<string>('tout')
 
   async function filtrage (): Promise<void> {
-    if (choixT === 'tout') {
-      setAffichage(evenements)
-    } else if (
+    let resu = await fetch(`${API_adr}evenements`).then(res => res.json())
+    if (
       choixT === 'type' ||
       choixT === 'zones' ||
       choixT === 'enclos' ||
       choixT === 'especes' ||
       choixT === 'animaux'
     ) {
-      const resu = await fetch(`${API_adr}evenements/${choixT}/${choix}`).then(
-        res => res.json()
+      resu = await fetch(`${API_adr}evenements/${choixT}/${choix}`).then(res =>
+        res.json()
       )
-
-      setAffichage(resu)
     }
+    setAffichage(resu)
   }
 
   return (

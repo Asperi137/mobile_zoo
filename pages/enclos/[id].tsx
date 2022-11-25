@@ -7,6 +7,7 @@ import Zones from 'Types/Zones'
 import IsConnected from 'lib/isConnected'
 import { useContext, useState } from 'react'
 import { UserContext } from 'lib/UserContext'
+import BoutonAction from 'components/ui/boutonAction/BoutonAction'
 
 const API_adr = process.env.API_adr
 
@@ -23,60 +24,25 @@ export default function Index ({
   zone,
   API_adr
 }: props): JSX.Element {
-  const { role } = useContext(UserContext)
-
-  const [verif, setverif] = useState('')
-
-  async function verifier (event: any) {
-    event.preventDefault()
-
-    const data = {
-      enclos: enclos._id,
-      createur: role,
-      observations: event.target.observations.value
-    }
-    const JSONdata = JSON.stringify(data)
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSONdata
-    }
-
-    fetch(`${API_adr}enclos/verifier`, options)
-    setverif('')
-  }
-
   return (
     <div className='containerV'>
-      {
-        /*IsConnected() && */ <>
+      {IsConnected() && (
+        <>
           <button className='btnRetour'>
             <Link href={`/enclos`} as={`/enclos`}>
               {`retour à la liste des enclos `}
             </Link>
           </button>
           <div className='containerV'>
-            <div className='containerV'>
-              {!verif && (
-                <button onClick={() => setverif('verifier')}>
-                  Verifier enclos
-                </button>
-              )}
-              {verif && (
-                <form className='containerV' onSubmit={verifier} method='POST'>
-                  <input
-                    type='text'
-                    id='observations'
-                    name='observations'
-                    placeholder="observations sur l'enclos"
-                  />
-                  <br />
-                  <button type='submit'>Valider</button>
-                </form>
-              )}
-            </div>
+            {(IsConnected() === 'veterinaire' ||
+              IsConnected() === 'responssableZone' ||
+              IsConnected() === 'admin') && (
+              <BoutonAction
+                cible={enclos._id}
+                action={'verifier'}
+                API_adr={API_adr}
+              />
+            )}
             <InfoEnclos enclos={enclos} zone={zone} />
           </div>
           <div className='containerH'>
@@ -94,7 +60,7 @@ export default function Index ({
             )}
           </div>
         </>
-      }
+      )}
       {!IsConnected() && (
         <button className='btnRetour'>
           <Link href='/'>Veillez vous connecter</Link>
