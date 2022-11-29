@@ -11,6 +11,19 @@ const API_adr = process.env.API_adr
  * /api/animaux/soigner:
  *   post:
  *     tags: [Animaux]
+ *     parameters:
+ *       - in: query
+ *         name: animal
+ *         required: true
+ *         type: string
+ *         description: _id de l'animal a soigner
+ *       - in: query
+ *         name: createur
+ *         required: true
+ *         type: string
+ *       - in: query
+ *         name: observations
+ *         type: string
  *     description: Creer un evenement de soins
  *     responses:
  *       201:

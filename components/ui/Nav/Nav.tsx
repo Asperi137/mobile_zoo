@@ -19,20 +19,24 @@ export default function Nav () {
       {!IsConnected() && <Link href='/'>Connection</Link>}
       {IsConnected() && (
         <nav className='containerH'>
-          <Link href='/'>retour à l'accueil</Link>
-          <br />|
-          <Link href='/'>
-            <span onClick={deconection}>déconnection</span>
-          </Link>
-          <br />|
-          <br />
-          <Link href='/enclos'>enclos</Link>
-          <br />
-          <Link href='/especes'>especes</Link>
-          <br />
-          <Link href='/animaux'>animaux</Link>
-          <br />|<br />
-          <Link href='/evenements'>Evenement</Link>
+          <div className='containerH'>
+            <Link href='/'>retour à l'accueil</Link>|
+          </div>
+          <div className='containerH'>
+            <Link href='/'>
+              <span onClick={deconection}>déconnection</span>
+            </Link>
+            |
+          </div>
+          <div className='containerH'>
+            <Link href='/enclos'>enclos</Link>
+            <Link href='/especes'>especes</Link>
+            <Link href='/animaux'>animaux</Link>|
+          </div>
+
+          <div className='containerH'>
+            <Link href='/evenements'>Evenement</Link>
+          </div>
         </nav>
       )}
     </>

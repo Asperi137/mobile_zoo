@@ -34,6 +34,8 @@ export default function Index ({
               {`retour à l'especes : ${espece.nom} `}
             </Link>
           </button>
+          <h2 className='alignCenter'>{animal.nom}</h2>
+
           {(IsConnected() === 'veterinaire' || IsConnected() === 'admin') && (
             <BoutonAction
               cible={animal._id}
@@ -43,7 +45,6 @@ export default function Index ({
           )}
           <InfoEnclos enclos={enclos} zone={zone} />
           <InfoEspece enclos={enclos} espece={espece} />
-          {animal.nom}
         </>
       )}
       {!IsConnected() && (

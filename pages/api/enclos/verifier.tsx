@@ -10,6 +10,19 @@ mongooseConnect()
  * /api/enclos/verifier:
  *   post:
  *     tags: [Enclos]
+ *     parameters:
+ *       - in: query
+ *         name: enclos
+ *         required: true
+ *         type: string
+ *         description: _id de l'enclos a verifier
+ *       - in: query
+ *         name: createur
+ *         required: true
+ *         type: string
+ *       - in: query
+ *         name: observations
+ *         type: string
  *     description: Creer un evenement de verification
  *     responses:
  *       201:

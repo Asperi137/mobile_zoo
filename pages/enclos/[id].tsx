@@ -33,6 +33,7 @@ export default function Index ({
               {`retour à la liste des enclos `}
             </Link>
           </button>
+          <h2 className='alignCenter'>{enclos.nom}</h2>
           <div className='containerV'>
             {(IsConnected() === 'veterinaire' ||
               IsConnected() === 'responssableZone' ||

@@ -13,7 +13,6 @@ export default function BoutonAction ({ cible, action, API_adr }: props) {
     let type = 'especes'
     let data = {}
     event.preventDefault()
-
     switch (action) {
       case 'soigner':
         {
@@ -55,7 +54,6 @@ export default function BoutonAction ({ cible, action, API_adr }: props) {
         }
         break
     }
-
     console.log(data)
     const JSONdata = JSON.stringify(data)
     const options = {
@@ -66,6 +64,10 @@ export default function BoutonAction ({ cible, action, API_adr }: props) {
       body: JSONdata
     }
     fetch(`${API_adr}${type}/${action}`, options)
+    setverif('')
+  }
+  function annuler (event: any) {
+    event.preventDefault()
     setverif('')
   }
 
@@ -86,7 +88,10 @@ export default function BoutonAction ({ cible, action, API_adr }: props) {
             placeholder={`observations ${action}`}
           />
           <br />
-          <button type='submit'>{action}</button>
+          <div>
+            <button type='submit'>{action}</button>
+            <button onClick={annuler}>annuler</button>
+          </div>
         </form>
       )}
     </>

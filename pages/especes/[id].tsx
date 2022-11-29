@@ -38,19 +38,18 @@ export default function Index ({
               {`retour à l'enclos : ${enclos.nom} `}
             </Link>
           </button>
-          <div className='containerH'>
-            <div className='containerV'>
-              <BoutonAction
-                cible={espece._id}
-                action={'nourrir'}
-                API_adr={API_adr}
-              />
-              <BoutonAction
-                cible={espece._id}
-                action={'stimuler'}
-                API_adr={API_adr}
-              />
-            </div>
+          <h2 className='alignCenter'>{espece.nom}</h2>
+          <div className='containerV'>
+            <BoutonAction
+              cible={espece._id}
+              action={'nourrir'}
+              API_adr={API_adr}
+            />
+            <BoutonAction
+              cible={espece._id}
+              action={'stimuler'}
+              API_adr={API_adr}
+            />
             <InfoEnclos enclos={enclos} zone={zone} />
             <InfoEspece enclos={enclos} espece={espece} />
           </div>
