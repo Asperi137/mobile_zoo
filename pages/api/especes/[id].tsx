@@ -5,6 +5,42 @@ import ResponseError from 'Types/ResponseError'
 import { deleteEspece, getOneEspece, modifyEspece } from 'controllers/especes'
 
 mongooseConnect()
+/**
+ * @swagger
+ * /api/especes/[id]:
+ *   get:
+ *     tags: [Especes]
+ *     description: Returns les caracteristique de l'Espece [id]
+ *     responses:
+ *       200:
+ *         description: les caracteristique de l'Espece [id]
+ *       404:
+ *         description: animal non trouvé
+ */
+/**
+ * @swagger
+ * /api/especes/[id]:
+ *   put:
+ *     tags: [Especes]
+ *     description: modifie les caracteriqtique de l'Espece [id]
+ *     responses:
+ *       202:
+ *         description: Espece modifié
+ *       400:
+ *         description: error
+ */
+/**
+ * @swagger
+ * /api/especes/[id]:
+ *   delete:
+ *     tags: [Especes]
+ *     description: supprime l'Espece [id]
+ *     responses:
+ *       410:
+ *         description: Espece supprimé
+ *       404:
+ *         description: error
+ */
 
 export default function Handler (
   req: NextApiRequest,

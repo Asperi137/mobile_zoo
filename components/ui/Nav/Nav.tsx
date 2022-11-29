@@ -19,6 +19,8 @@ export default function Nav () {
       {!IsConnected() && <Link href='/'>Connection</Link>}
       {IsConnected() && (
         <nav className='containerH'>
+          <Link href='/'>retour à l'accueil</Link>
+          <br />|
           <Link href='/'>
             <span onClick={deconection}>déconnection</span>
           </Link>

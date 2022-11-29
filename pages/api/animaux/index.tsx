@@ -5,6 +5,30 @@ import ResponseError from 'Types/ResponseError'
 import { createAnimal, getAnimaux } from 'controllers/animaux'
 
 mongooseConnect()
+/**
+ * @swagger
+ * /api/animaux:
+ *   get:
+ *     tags: [Animaux]
+ *     description: Returns la list des animaux
+ *     responses:
+ *       200:
+ *         description: la list des animaux
+ *       404:
+ *         description: error
+ */
+/**
+ * @swagger
+ * /api/animaux:
+ *   post:
+ *     tags: [Animaux]
+ *     description: Creer un animal [id]
+ *     responses:
+ *       201:
+ *         description: Animal ajouté
+ *       400:
+ *         description: error
+ */
 
 export default function Handler (
   req: NextApiRequest,

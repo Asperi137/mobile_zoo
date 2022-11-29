@@ -1,5 +1,6 @@
 import IsConnected from 'lib/isConnected'
 import { UserContext } from 'lib/UserContext'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import FormSignUp from './FormSignup'
@@ -69,7 +70,14 @@ export default function FormConnect () {
           <button onClick={deconection}>déconnection</button>
         </form>
       )}
-      {IsConnected() && IsConnected() === 'admin' && <FormSignUp />}
+      {IsConnected() && IsConnected() === 'admin' && (
+        <>
+          <FormSignUp />
+          <Link href='api-doc'>
+            <button>api-doc</button>
+          </Link>
+        </>
+      )}
     </>
   )
 }

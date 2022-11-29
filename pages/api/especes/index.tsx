@@ -6,6 +6,30 @@ import Especes from 'Types/Especes'
 import { createEspece, getEspeces } from 'controllers/especes'
 
 mongooseConnect()
+/**
+ * @swagger
+ * /api/especes:
+ *   get:
+ *     tags: [Especes]
+ *     description: Returns la list des especes
+ *     responses:
+ *       200:
+ *         description: la list des especes
+ *       404:
+ *         description: error
+ */
+/**
+ * @swagger
+ * /api/especes:
+ *   post:
+ *     tags: [Especes]
+ *     description: Creer un especes [id]
+ *     responses:
+ *       201:
+ *         description: especes ajouté
+ *       400:
+ *         description: error
+ */
 
 export default function Handler (
   req: NextApiRequest,

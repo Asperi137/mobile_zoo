@@ -6,7 +6,18 @@ import { agirSurEspeces } from 'controllers/especes'
 
 mongooseConnect()
 const API_adr = process.env.API_adr
-
+/**
+ * @swagger
+ * /api/especes/nourrir:
+ *   post:
+ *     tags: [Especes]
+ *     description: Creer un evenement de nourrissage
+ *     responses:
+ *       201:
+ *         description: nourrissage ajouté
+ *       400:
+ *         description: error
+ */
 export default function Handler (
   req: NextApiRequest,
   res: NextApiResponse<Evenements | ResponseError>

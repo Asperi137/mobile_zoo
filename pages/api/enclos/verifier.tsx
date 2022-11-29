@@ -5,7 +5,18 @@ import Evenements from 'Types/Evenements'
 import { agirSurEnclos } from 'controllers/enclos'
 
 mongooseConnect()
-
+/**
+ * @swagger
+ * /api/enclos/verifier:
+ *   post:
+ *     tags: [Enclos]
+ *     description: Creer un evenement de verification
+ *     responses:
+ *       201:
+ *         description: verification ajouté
+ *       400:
+ *         description: error
+ */
 export default function Handler (
   req: NextApiRequest,
   res: NextApiResponse<Evenements | ResponseError>

@@ -5,6 +5,42 @@ import ResponseError from 'Types/ResponseError'
 import { deleteEnclos, getOneEnclos, modifyEnclos } from 'controllers/enclos'
 
 mongooseConnect()
+/**
+ * @swagger
+ * /api/enclos/[id]:
+ *   get:
+ *     tags: [Enclos]
+ *     description: Returns les caracteristique de l'enclos [id]
+ *     responses:
+ *       200:
+ *         description: les caracteristique de l'enclos [id]
+ *       404:
+ *         description: enclos non trouvé
+ */
+/**
+ * @swagger
+ * /api/enclos/[id]:
+ *   put:
+ *     tags: [Enclos]
+ *     description: modifie les caracteriqtique de l'enclos [id]
+ *     responses:
+ *       202:
+ *         description: enclos modifié
+ *       400:
+ *         description: error
+ */
+/**
+ * @swagger
+ * /api/enclos/[id]:
+ *   delete:
+ *     tags: [Enclos]
+ *     description: supprime l'enclos [id]
+ *     responses:
+ *       410:
+ *         description: enclos supprimé
+ *       404:
+ *         description: error
+ */
 
 export default function Handler (
   req: NextApiRequest,

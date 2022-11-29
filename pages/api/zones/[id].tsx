@@ -6,6 +6,43 @@ import { deleteZone, getOneZone, modifyZone } from 'controllers/zones'
 
 mongooseConnect()
 
+/**
+ * @swagger
+ * /api/zones/[id]:
+ *   get:
+ *     tags: [Zones]
+ *     description: Returns les caracteristique de l'zones [id]
+ *     responses:
+ *       200:
+ *         description: les caracteristique de l'zones [id]
+ *       404:
+ *         description: zones non trouvé
+ */
+/**
+ * @swagger
+ * /api/zones/[id]:
+ *   put:
+ *     tags: [Zones]
+ *     description: modifie les caracteriqtique de l'zones [id]
+ *     responses:
+ *       202:
+ *         description: zones modifié
+ *       400:
+ *         description: error
+ */
+/**
+ * @swagger
+ * /api/zones/[id]:
+ *   delete:
+ *     tags: [Zones]
+ *     description: supprime l'zones [id]
+ *     responses:
+ *       410:
+ *         description: zones supprimé
+ *       404:
+ *         description: error
+ */
+
 export default function Handler (
   req: NextApiRequest,
   res: NextApiResponse<Zones | ResponseError>

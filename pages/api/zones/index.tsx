@@ -6,6 +6,31 @@ import { createZone, getZones } from 'controllers/zones'
 
 mongooseConnect()
 
+/**
+ * @swagger
+ * /api/zones:
+ *   get:
+ *     tags: [Zones]
+ *     description: Returns la list des zones
+ *     responses:
+ *       200:
+ *         description: la list des zones
+ *       404:
+ *         description: error
+ */
+/**
+ * @swagger
+ * /api/zones:
+ *   post:
+ *     tags: [Zones]
+ *     description: Creer un zones [id]
+ *     responses:
+ *       201:
+ *         description: zones ajouté
+ *       400:
+ *         description: error
+ */
+
 export default function Handler (
   req: NextApiRequest,
   res: NextApiResponse<Zones[] | Zones | ResponseError>

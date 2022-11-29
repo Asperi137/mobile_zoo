@@ -6,6 +6,42 @@ import { deleteAnimal, getOneAnimal, modifyAnimal } from 'controllers/animaux'
 
 mongooseConnect()
 
+/**
+ * @swagger
+ * /api/animaux/[id]:
+ *   get:
+ *     tags: [Animaux]
+ *     description: Returns les caracteristique de l'animal [id]
+ *     responses:
+ *       200:
+ *         description: les caracteristique de l'animal [id]
+ *       404:
+ *         description: animal non trouvé
+ */
+/**
+ * @swagger
+ * /api/animaux/[id]:
+ *   put:
+ *     tags: [Animaux]
+ *     description: modifie les caracteriqtique de l'animal [id]
+ *     responses:
+ *       202:
+ *         description: Animal modifié
+ *       400:
+ *         description: error
+ */
+/**
+ * @swagger
+ * /api/animaux/[id]:
+ *   delete:
+ *     tags: [Animaux]
+ *     description: supprime l'animal [id]
+ *     responses:
+ *       410:
+ *         description: Animal supprimé
+ *       404:
+ *         description: error
+ */
 export default function Handler (
   req: NextApiRequest,
   res: NextApiResponse<Animaux | ResponseError>

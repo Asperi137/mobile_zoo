@@ -157,7 +157,7 @@ export default function Index ({
             <tbody>
               {affichage.map((event: Evenements) => (
                 <tr key={event._id}>
-                  <td>{event.createdAt.toString()}</td>
+                  <td>{new Date(event.createdAt).toLocaleString()}</td>
                   <td>{event.type}</td>
                   <td>
                     <Link href={`/enclos`} as={`/enclos`}>
@@ -216,6 +216,7 @@ export async function getServerSideProps () {
     res.json()
   )
   const zones: Zones[] = await fetch(`${API_adr}zones`).then(res => res.json())
+
   return {
     props: {
       evenements,

@@ -5,6 +5,30 @@ import ResponseError from 'Types/ResponseError'
 import { creatEnclos, getEnclos } from 'controllers/enclos'
 
 mongooseConnect()
+/**
+ * @swagger
+ * /api/enclos:
+ *   get:
+ *     tags: [Enclos]
+ *     description: Returns la list des enclos
+ *     responses:
+ *       200:
+ *         description: la list des enclos
+ *       404:
+ *         description: error
+ */
+/**
+ * @swagger
+ * /api/enclos:
+ *   post:
+ *     tags: [Enclos]
+ *     description: Creer un enclos [id]
+ *     responses:
+ *       201:
+ *         description: enclos ajouté
+ *       400:
+ *         description: error
+ */
 
 export default function Handler (
   req: NextApiRequest,
