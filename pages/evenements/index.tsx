@@ -180,7 +180,14 @@ export default function Index ({
                       {event.espece}
                     </Link>
                   </td>
-                  <td>{event.animal}</td>
+                  <td>
+                    <Link
+                      href={`/animaux/${event.animal}`}
+                      as={`/animaux/${event.animal}`}
+                    >
+                      {event.animal}
+                    </Link>
+                  </td>
                   <td>{event.createur}</td>
                   <td>{event.observations}</td>
                 </tr>

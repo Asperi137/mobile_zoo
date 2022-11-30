@@ -1,59 +1,38 @@
 import { UserContext } from 'lib/UserContext'
-import { useContext, useState } from 'react'
+import { Dispatch, SetStateAction, useContext, useState } from 'react'
 
 const API_adr = process.env.API_adr
 
-type props = { cible: string; action: string; API_adr: string }
+type props = {
+  cible: string
+  API_adr: string
+  position: string
+  setPosition: Dispatch<SetStateAction<string>>
+}
 
-export default function BoutonAction ({ cible, action, API_adr }: props) {
+export default function BoutonEntrerSortir ({
+  cible,
+  API_adr,
+  position,
+  setPosition
+}: props) {
   const { role } = useContext(UserContext)
   const [verif, setverif] = useState('')
+  let action = 'rentrer'
+  if (position === 'dedans') {
+    action = 'sortir'
+  }
 
   function valider (event: any) {
-    let type = 'especes'
-    let data = {}
     event.preventDefault()
-    switch (action) {
-      case 'soigner':
-        {
-          type = 'animaux'
-        }
-        break
-      case 'verifier':
-        {
-          type = 'enclos'
-        }
-        break
+    let type = 'animaux'
+
+    const data = {
+      animal: cible,
+      createur: role,
+      observations: event.target.observations.value
     }
-    switch (type) {
-      case 'enclos':
-        {
-          data = {
-            enclos: cible,
-            createur: role,
-            observations: event.target.observations.value
-          }
-        }
-        break
-      case 'especes':
-        {
-          data = {
-            espece: cible,
-            createur: role,
-            observations: event.target.observations.value
-          }
-        }
-        break
-      case 'animaux':
-        {
-          data = {
-            animal: cible,
-            createur: role,
-            observations: event.target.observations.value
-          }
-        }
-        break
-    }
+
     const JSONdata = JSON.stringify(data)
     const options = {
       method: 'POST',
@@ -62,7 +41,12 @@ export default function BoutonAction ({ cible, action, API_adr }: props) {
       },
       body: JSONdata
     }
-    fetch(`${API_adr}${type}/${action}`, options)
+    fetch(`${API_adr}${type}/${action}`, options).then(() => {
+      if (action === 'sortir') {
+        setPosition('dehors')
+      } else setPosition('dedans')
+    })
+
     setverif('')
   }
   function annuler (event: any) {

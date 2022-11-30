@@ -7,5 +7,5 @@ export default function mongooseConnect () {
   return mongoose
     .connect(process.env.MONGODB_URI)
     .then(() => console.log('Connexion à MongoDB réussie !'))
-    .catch(() => console.log('Connexion à MongoDB échouée !'))
+    .catch(error => console.log('Connexion à MongoDB échouée !' + error))
 }

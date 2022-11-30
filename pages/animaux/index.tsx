@@ -22,7 +22,7 @@ export default function Index ({ animaux, especes }: Props): JSX.Element {
                   animal.espece === espece._id && (
                     <button key={animal._id}>
                       <Link href='/animaux/[id]' as={`/animaux/${animal._id}`}>
-                        {`${animal._id}`}
+                        {`${animal.nom}`}
                       </Link>
                     </button>
                   )

@@ -8,6 +8,9 @@ import InfoEspece from 'components/ui/barreInfo/InfoEspece'
 import InfoEnclos from 'components/ui/barreInfo/InfoEnclos'
 import IsConnected from 'lib/isConnected'
 import BoutonAction from 'components/ui/boutonAction/BoutonAction'
+import InfoAnimal from 'components/ui/barreInfo/InfoAnimal'
+import { useState } from 'react'
+import BoutonEntrerSortir from 'components/ui/boutonAction/BoutonEntrerSortir'
 const API_adr = process.env.API_adr
 
 type props = {
@@ -25,6 +28,8 @@ export default function Index ({
   zone,
   API_adr
 }: props): JSX.Element {
+  const [position, setPosition] = useState(animal.position)
+
   return (
     <div className='containerV'>
       {IsConnected() && (
@@ -35,7 +40,6 @@ export default function Index ({
             </Link>
           </button>
           <h2 className='alignCenter'>{animal.nom}</h2>
-
           {(IsConnected() === 'veterinaire' || IsConnected() === 'admin') && (
             <BoutonAction
               cible={animal._id}
@@ -43,8 +47,16 @@ export default function Index ({
               API_adr={API_adr}
             />
           )}
+          <BoutonEntrerSortir
+            cible={animal._id}
+            API_adr={API_adr}
+            position={position}
+            setPosition={setPosition}
+          />
+
           <InfoEnclos enclos={enclos} zone={zone} />
-          <InfoEspece enclos={enclos} espece={espece} />
+          <InfoEspece espece={espece} />
+          <InfoAnimal animal={animal} position={position} />
         </>
       )}
       {!IsConnected() && (

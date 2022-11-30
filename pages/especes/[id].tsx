@@ -51,7 +51,7 @@ export default function Index ({
               API_adr={API_adr}
             />
             <InfoEnclos enclos={enclos} zone={zone} />
-            <InfoEspece enclos={enclos} espece={espece} />
+            <InfoEspece espece={espece} />
           </div>
           <div className='containerH'>
             {animaux.map(

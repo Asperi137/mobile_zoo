@@ -65,8 +65,6 @@ export async function agirSurAnimaux (
 ) {
   const date = Date.now()
 
-  console.log(req.body.espece)
-
   const animal: Animaux = await fetch(
     `${API_adr}animaux/${req.body.animal}`
   ).then(res => res.json())
@@ -90,8 +88,25 @@ export async function agirSurAnimaux (
     observations: req.body.observations
   })
 
-  evenement
-    .save()
-    .then(() => res.status(201).json({ message: `${action} ajoutée` }))
-    .catch((error: ResponseError) => res.status(400).json(error))
+  let updated: boolean = false
+  if (action === 'entre' && animal.position !== 'dedans') {
+    AnimalM.updateOne({ _id: animal._id }, { position: 'dedans' }).then(() => {
+      evenement
+        .save()
+        .then(() => res.status(201).json({ message: `${action} ajoutée` }))
+        .catch((error: ResponseError) => res.status(400).json(error))
+    })
+  } else if (action === 'sortie' && animal.position !== 'dehors') {
+    AnimalM.updateOne({ _id: animal._id }, { position: 'dehors' }).then(() => {
+      evenement
+        .save()
+        .then(() => res.status(201).json({ message: `${action} ajoutée` }))
+        .catch((error: ResponseError) => res.status(400).json(error))
+    })
+  } else {
+    evenement
+      .save()
+      .then(() => res.status(201).json({ message: `${action} ajoutée` }))
+      .catch((error: ResponseError) => res.status(400).json(error))
+  }
 }

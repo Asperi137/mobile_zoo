@@ -1,6 +1,7 @@
 import classes from './Header.module.css'
 import Nav from 'components/ui/Nav/Nav'
 import Head from 'next/head'
+import Link from 'next/link'
 
 export default function Header () {
   return (
@@ -12,14 +13,14 @@ export default function Header () {
       </Head>
       <header className={classes.Header}>
         <div
-          className='container'
+          className='containerH'
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
+            justifyContent: 'space-between'
           }}
         >
-          <h1 style={{ margin: 0 }}>Mon Zoo à moi !</h1>
+          <h1 style={{ margin: 0 }}>
+            <Link href='/'>Mon Zoo à moi !</Link>
+          </h1>
           <Nav />
         </div>
       </header>

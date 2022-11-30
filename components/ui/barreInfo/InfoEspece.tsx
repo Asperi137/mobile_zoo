@@ -1,8 +1,7 @@
 import classes from './barreInfo.module.css'
-import Enclos from 'Types/Enclos'
 import Especes from 'Types/Especes'
 
-type props = { espece: Especes; enclos: Enclos }
+type props = { espece: Especes }
 
 function isSociable (espece: Especes) {
   if (espece.sociable) return 'sociable'
@@ -13,12 +12,10 @@ function isDanger (espece: Especes) {
   else return 'inoffensif'
 }
 
-export default function infoEnclos ({ enclos, espece }: props): JSX.Element {
+export default function infoEnclos ({ espece }: props): JSX.Element {
   return (
     <div className={`${classes.infobarre}`}>
       {`${espece.nom}`}
-      <br />
-      {`${enclos.nom}`}
       <br />
       {`${isSociable(espece)} `}
       <br />
