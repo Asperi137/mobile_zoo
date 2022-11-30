@@ -20,6 +20,12 @@ type Props = {
   API_adr: string
 }
 
+function tri (event: Evenements[]) {
+  const triDate = (a: Evenements, b: Evenements) =>
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  return event.sort(triDate)
+}
+
 export default function Index ({
   evenements,
   animaux,
@@ -29,7 +35,7 @@ export default function Index ({
   Type_evenements,
   API_adr
 }: Props) {
-  const [affichage, setAffichage] = useState<Evenements[]>(evenements)
+  const [affichage, setAffichage] = useState<Evenements[]>(tri(evenements))
   const [choix, setChoix] = useState<string>('tout')
   const [choixT, setChoixT] = useState<string>('tout')
 
@@ -46,7 +52,8 @@ export default function Index ({
         res.json()
       )
     }
-    setAffichage(resu)
+
+    setAffichage(tri(resu))
   }
 
   return (

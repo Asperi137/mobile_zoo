@@ -10,7 +10,6 @@ export async function getEventsCible (
   req: NextApiRequest,
   res: NextApiResponse<Evenements[] | ResponseError>
 ) {
-  console.log(cibleEvent)
   switch (cibleEvent) {
     case 'zone': {
       EvenementsM.find({ zone: req.query.id })
