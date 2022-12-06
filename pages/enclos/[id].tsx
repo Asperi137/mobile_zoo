@@ -34,18 +34,17 @@ export default function Index ({
             </Link>
           </button>
           <h2 className='alignCenter'>{enclos.nom}</h2>
-          <div className='containerV'>
-            {(IsConnected() === 'veterinaire' ||
-              IsConnected() === 'responssableZone' ||
-              IsConnected() === 'admin') && (
-              <BoutonAction
-                cible={enclos._id}
-                action={'verifier'}
-                API_adr={API_adr}
-              />
-            )}
-            <InfoEnclos enclos={enclos} zone={zone} />
-          </div>
+          {(IsConnected() === 'veterinaire' ||
+            IsConnected() === 'responssableZone' ||
+            IsConnected() === 'admin') && (
+            <BoutonAction
+              cible={enclos._id}
+              action={'verifier'}
+              API_adr={API_adr}
+            />
+          )}
+          <InfoEnclos enclos={enclos} zone={zone} />
+
           <div className='containerH'>
             {especeslst.map(
               (especes: Especes) =>

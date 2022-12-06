@@ -1,12 +1,13 @@
 import IsConnected from 'lib/isConnected'
 import Link from 'next/link'
 import Evenements from 'Types/Evenements'
-import { useState } from 'react'
+import { SetStateAction, useState } from 'react'
 import Especes from 'Types/Especes'
 import Enclos from 'Types/Enclos'
 import Animaux from 'Types/Animaux'
 import Zones from 'Types/Zones'
 import Type_evenements from 'Types/Type_evenements'
+import TableauEvent from 'components/ui/TableauEvent/TableauEvent'
 
 const API_adr = process.env.API_adr
 
@@ -37,7 +38,7 @@ export default function Index ({
 }: Props) {
   const [affichage, setAffichage] = useState<Evenements[]>(tri(evenements))
   const [choix, setChoix] = useState<string>('tout')
-  const [choixT, setChoixT] = useState<string>('tout')
+  const [choixT, setChoixT] = useState<string>('')
 
   async function filtrage (): Promise<void> {
     let resu = await fetch(`${API_adr}evenements`).then(res => res.json())
@@ -52,7 +53,6 @@ export default function Index ({
         res.json()
       )
     }
-
     setAffichage(tri(resu))
   }
 
@@ -62,7 +62,7 @@ export default function Index ({
         <>
           <div className='alignCenter'>
             <h2>
-              Tableaux des evenements :{choixT} {choix}
+              Tableaux des evenements : {choixT} {choix}
             </h2>
           </div>
           <div className='containerH, alignCenter '>
@@ -70,16 +70,52 @@ export default function Index ({
             <button
               onClick={() => {
                 setChoixT('tout')
+                setChoix('')
                 filtrage()
               }}
             >
               TOUT
             </button>
-            <button onClick={() => setChoixT('type')}>Type</button>
-            <button onClick={() => setChoixT('zones')}>Zones</button>
-            <button onClick={() => setChoixT('enclos')}>Enclos</button>
-            <button onClick={() => setChoixT('especes')}>Especes</button>
-            <button onClick={() => setChoixT('animaux')}>Animaux</button>
+            <button
+              onClick={() => {
+                setChoixT('type')
+                setChoix('')
+              }}
+            >
+              Type
+            </button>
+            <button
+              onClick={() => {
+                setChoixT('zones')
+                setChoix('')
+              }}
+            >
+              Zones
+            </button>
+            <button
+              onClick={() => {
+                setChoixT('enclos')
+                setChoix('')
+              }}
+            >
+              Enclos
+            </button>
+            <button
+              onClick={() => {
+                setChoixT('especes')
+                setChoix('')
+              }}
+            >
+              Especes
+            </button>
+            <button
+              onClick={() => {
+                setChoixT('animaux')
+                setChoix('')
+              }}
+            >
+              Animaux
+            </button>
           </div>
           <div className='containerH , bordered'>
             {choixT === 'type' &&
@@ -148,59 +184,7 @@ export default function Index ({
                 </div>
               ))}
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th scope='col'>Date de création</th>
-                <th scope='col'>Type</th>
-                <th scope='col'>Zone</th>
-                <th scope='col'>Enclos</th>
-                <th scope='col'>Espece</th>
-                <th scope='col'>Animal</th>
-                <th scope='col'>Createur</th>
-                <th scope='col'>Observations</th>
-              </tr>
-            </thead>
-            <tbody>
-              {affichage.map((event: Evenements) => (
-                <tr key={event._id}>
-                  <td>{new Date(event.createdAt).toLocaleString()}</td>
-                  <td>{event.type}</td>
-                  <td>
-                    <Link href={`/enclos`} as={`/enclos`}>
-                      {event.zone}
-                    </Link>
-                  </td>
-                  <td>
-                    <Link
-                      href={`/enclos/${event.enclos}`}
-                      as={`/enclos/${event.enclos}`}
-                    >
-                      {event.enclos}
-                    </Link>
-                  </td>
-                  <td>
-                    <Link
-                      href={`/especes/${event.espece}`}
-                      as={`/especes/${event.espece}`}
-                    >
-                      {event.espece}
-                    </Link>
-                  </td>
-                  <td>
-                    <Link
-                      href={`/animaux/${event.animal}`}
-                      as={`/animaux/${event.animal}`}
-                    >
-                      {event.animal}
-                    </Link>
-                  </td>
-                  <td>{event.createur}</td>
-                  <td>{event.observations}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <TableauEvent affichage={affichage} />
         </>
       )}
       {!IsConnected() && (

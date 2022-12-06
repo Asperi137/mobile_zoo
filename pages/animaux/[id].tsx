@@ -40,23 +40,25 @@ export default function Index ({
             </Link>
           </button>
           <h2 className='alignCenter'>{animal.nom}</h2>
-          {(IsConnected() === 'veterinaire' || IsConnected() === 'admin') && (
-            <BoutonAction
+          <div className='containerV'>
+            {' '}
+            {(IsConnected() === 'veterinaire' || IsConnected() === 'admin') && (
+              <BoutonAction
+                cible={animal._id}
+                action={'soigner'}
+                API_adr={API_adr}
+              />
+            )}
+            <BoutonEntrerSortir
               cible={animal._id}
-              action={'soigner'}
               API_adr={API_adr}
+              position={position}
+              setPosition={setPosition}
             />
-          )}
-          <BoutonEntrerSortir
-            cible={animal._id}
-            API_adr={API_adr}
-            position={position}
-            setPosition={setPosition}
-          />
-
-          <InfoEnclos enclos={enclos} zone={zone} />
-          <InfoEspece espece={espece} />
-          <InfoAnimal animal={animal} position={position} />
+            <InfoAnimal animal={animal} position={position} />
+            <InfoEspece espece={espece} />
+            <InfoEnclos enclos={enclos} zone={zone} />
+          </div>
         </>
       )}
       {!IsConnected() && (

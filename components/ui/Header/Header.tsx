@@ -3,7 +3,7 @@ import Nav from 'components/ui/Nav/Nav'
 import Head from 'next/head'
 import Link from 'next/link'
 
-export default function Header () {
+export default function Header (): JSX.Element {
   return (
     <>
       <Head>

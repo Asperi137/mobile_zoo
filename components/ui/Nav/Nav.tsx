@@ -27,7 +27,7 @@ export default function Nav () {
           </div>
           <div className='containerH'>
             <div className='containerH'>
-              <Link href='/'>retour à l'accueil</Link>|
+              <Link href='/'>Accueil</Link>|
             </div>
 
             <div className='containerH'>
