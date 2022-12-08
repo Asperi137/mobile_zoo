@@ -24,7 +24,10 @@ a {
     background: black;
   }
 }
-
+h2 {
+  color: teal;
+  padding-left: 5em;
+}
 .alignCenter {
   text-align: center;
 }

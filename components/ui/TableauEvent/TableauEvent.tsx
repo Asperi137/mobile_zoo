@@ -1,9 +1,14 @@
 import Link from 'next/link'
-import { Dispatch, SetStateAction } from 'react'
 import Evenements from 'Types/Evenements'
 
 type Props = {
   affichage: Evenements[]
+}
+
+export function tri (event: Evenements[]) {
+  const triDate = (a: Evenements, b: Evenements) =>
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  return event.sort(triDate)
 }
 
 export default function TableauEvent ({ affichage }: Props) {

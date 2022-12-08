@@ -8,6 +8,8 @@ import InfoEspece from 'components/ui/barreInfo/InfoEspece'
 import InfoEnclos from 'components/ui/barreInfo/InfoEnclos'
 import IsConnected from 'lib/isConnected'
 import BoutonAction from 'components/ui/boutonAction/BoutonAction'
+import TableauEvent, { tri } from 'components/ui/TableauEvent/TableauEvent'
+import Evenements from 'Types/Evenements'
 
 const API_adr = process.env.API_adr
 
@@ -16,6 +18,7 @@ type props = {
   espece: Especes
   enclos: Enclos
   zone: Zones
+  event: Evenements[]
   API_adr: string
 }
 
@@ -24,6 +27,7 @@ export default function Index ({
   espece,
   enclos,
   zone,
+  event,
   API_adr
 }: props): JSX.Element {
   return (
@@ -38,7 +42,28 @@ export default function Index ({
               {`retour à l'enclos : ${enclos.nom} `}
             </Link>
           </button>
-          <h2 className='alignCenter'>{espece.nom}</h2>
+          <div className='containerH'>
+            <h2 className='alignCenter'>{espece.nom}</h2>
+            <InfoEnclos enclos={enclos} zone={zone} />
+            <InfoEspece espece={espece} />
+            <div className='containerV'>
+              {animaux.map(
+                (animal: Animaux) =>
+                  animal.espece === espece._id && (
+                    <div key={animal._id}>
+                      <button>
+                        <Link
+                          href='/animaux/[id]'
+                          as={`/animaux/${animal._id}`}
+                        >
+                          {`${animal.nom}`}
+                        </Link>
+                      </button>
+                    </div>
+                  )
+              )}
+            </div>
+          </div>
           <div className='containerV'>
             <BoutonAction
               cible={espece._id}
@@ -50,23 +75,8 @@ export default function Index ({
               action={'stimuler'}
               API_adr={API_adr}
             />
-            <InfoEnclos enclos={enclos} zone={zone} />
-            <InfoEspece espece={espece} />
           </div>
-          <div className='containerH'>
-            {animaux.map(
-              (animal: Animaux) =>
-                animal.espece === espece._id && (
-                  <div className='containerV , bordered' key={animal._id}>
-                    <button>
-                      <Link href='/animaux/[id]' as={`/animaux/${animal._id}`}>
-                        {`${animal.nom}`}
-                      </Link>
-                    </button>
-                  </div>
-                )
-            )}
-          </div>
+          <TableauEvent affichage={event} />
         </>
       )}
       {!IsConnected() && (
@@ -89,12 +99,18 @@ export async function getServerSideProps ({ params }: Params) {
     res.json()
   )
   const animaux = await fetch(`${API_adr}animaux`).then(res => res.json())
+  const event = tri(
+    await fetch(`${API_adr}evenements/especes/${params.id}`).then(res =>
+      res.json()
+    )
+  )
   return {
     props: {
       animaux,
       espece,
       enclos,
       zone,
+      event,
       API_adr
     }
   }

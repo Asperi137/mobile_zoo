@@ -11,6 +11,8 @@ import BoutonAction from 'components/ui/boutonAction/BoutonAction'
 import InfoAnimal from 'components/ui/barreInfo/InfoAnimal'
 import { useState } from 'react'
 import BoutonEntrerSortir from 'components/ui/boutonAction/BoutonEntrerSortir'
+import Evenements from 'Types/Evenements'
+import TableauEvent, { tri } from 'components/ui/TableauEvent/TableauEvent'
 const API_adr = process.env.API_adr
 
 type props = {
@@ -18,6 +20,7 @@ type props = {
   espece: Especes
   enclos: Enclos
   zone: Zones
+  event: Evenements[]
   API_adr: string
 }
 
@@ -26,6 +29,7 @@ export default function Index ({
   espece,
   enclos,
   zone,
+  event,
   API_adr
 }: props): JSX.Element {
   const [position, setPosition] = useState(animal.position)
@@ -39,9 +43,14 @@ export default function Index ({
               {`retour à l'especes : ${espece.nom} `}
             </Link>
           </button>
-          <h2 className='alignCenter'>{animal.nom}</h2>
+
           <div className='containerV'>
-            {' '}
+            <div className='containerH'>
+              <h2 className='alignCenter'>{animal.nom}</h2>
+              <InfoAnimal animal={animal} position={position} />
+              <InfoEspece espece={espece} />
+              <InfoEnclos enclos={enclos} zone={zone} />
+            </div>
             {(IsConnected() === 'veterinaire' || IsConnected() === 'admin') && (
               <BoutonAction
                 cible={animal._id}
@@ -55,10 +64,8 @@ export default function Index ({
               position={position}
               setPosition={setPosition}
             />
-            <InfoAnimal animal={animal} position={position} />
-            <InfoEspece espece={espece} />
-            <InfoEnclos enclos={enclos} zone={zone} />
           </div>
+          <TableauEvent affichage={event} />
         </>
       )}
       {!IsConnected() && (
@@ -83,6 +90,11 @@ export async function getServerSideProps ({ params }: Params) {
   const zone = await fetch(`${API_adr}zones/${enclos.zone}`).then(res =>
     res.json()
   )
+  const event = tri(
+    await fetch(`${API_adr}evenements/animaux/${params.id}`).then(res =>
+      res.json()
+    )
+  )
 
   return {
     props: {
@@ -90,6 +102,7 @@ export async function getServerSideProps ({ params }: Params) {
       espece,
       enclos,
       zone,
+      event,
       API_adr
     }
   }

@@ -1,10 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import mongooseConnect from 'lib/mongooseConnect'
 import ResponseError from 'Types/ResponseError'
-import { getOneTypeEvenements } from 'controllers/typeEvenement'
 import Evenements from 'Types/Evenements'
 import { getEventsCible } from 'controllers/eventCondition'
-import evenements from 'models/evenements'
 
 mongooseConnect()
 

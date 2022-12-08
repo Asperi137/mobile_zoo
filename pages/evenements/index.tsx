@@ -7,7 +7,7 @@ import Enclos from 'Types/Enclos'
 import Animaux from 'Types/Animaux'
 import Zones from 'Types/Zones'
 import Type_evenements from 'Types/Type_evenements'
-import TableauEvent from 'components/ui/TableauEvent/TableauEvent'
+import TableauEvent, { tri } from 'components/ui/TableauEvent/TableauEvent'
 
 const API_adr = process.env.API_adr
 
@@ -19,12 +19,6 @@ type Props = {
   zones: Zones[]
   Type_evenements: Type_evenements[]
   API_adr: string
-}
-
-function tri (event: Evenements[]) {
-  const triDate = (a: Evenements, b: Evenements) =>
-    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  return event.sort(triDate)
 }
 
 export default function Index ({

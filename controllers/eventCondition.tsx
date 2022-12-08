@@ -2,8 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next/types'
 import Evenements from 'Types/Evenements'
 import ResponseError from 'Types/ResponseError'
 import EvenementsM from 'models/evenements'
-import Zones from 'Types/Zones'
-import Enclos from 'Types/Enclos'
 
 export async function getEventsCible (
   cibleEvent: string,

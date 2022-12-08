@@ -51,11 +51,12 @@ export async function login (
                   expiresIn: '24h'
                 }
               )
-              res.status(200).json({
+              const userJson = {
                 login: user.login,
                 role: user.role,
                 token: token
-              })
+              }
+              res.status(200).json(userJson)
             } else
               res.status(500).json({ message: 'RANDOM_TOKEN_SECRET manquant' })
           })

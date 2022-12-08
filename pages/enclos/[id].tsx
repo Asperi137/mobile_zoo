@@ -5,9 +5,9 @@ import Enclos from 'Types/Enclos'
 import Especes from 'Types/Especes'
 import Zones from 'Types/Zones'
 import IsConnected from 'lib/isConnected'
-import { useContext, useState } from 'react'
-import { UserContext } from 'lib/UserContext'
 import BoutonAction from 'components/ui/boutonAction/BoutonAction'
+import TableauEvent, { tri } from 'components/ui/TableauEvent/TableauEvent'
+import Evenements from 'Types/Evenements'
 
 const API_adr = process.env.API_adr
 
@@ -15,6 +15,7 @@ type props = {
   enclos: Enclos
   especeslst: Especes[]
   zone: Zones
+  event: Evenements[]
   API_adr: string
 }
 
@@ -22,6 +23,7 @@ export default function Index ({
   enclos,
   especeslst,
   zone,
+  event,
   API_adr
 }: props): JSX.Element {
   return (
@@ -33,7 +35,23 @@ export default function Index ({
               {`retour à la liste des enclos `}
             </Link>
           </button>
-          <h2 className='alignCenter'>{enclos.nom}</h2>
+          <div className='containerH'>
+            <h2 className='alignCenter'>{enclos.nom}</h2>
+            <InfoEnclos enclos={enclos} zone={zone} />
+
+            <div className='containerV'>
+              {especeslst.map(
+                (especes: Especes) =>
+                  especes.enclos === enclos._id && (
+                    <button>
+                      <Link href='/especes/[id]' as={`/especes/${especes._id}`}>
+                        {`${especes.nom}`}
+                      </Link>
+                    </button>
+                  )
+              )}
+            </div>
+          </div>
           {(IsConnected() === 'veterinaire' ||
             IsConnected() === 'responssableZone' ||
             IsConnected() === 'admin') && (
@@ -43,22 +61,7 @@ export default function Index ({
               API_adr={API_adr}
             />
           )}
-          <InfoEnclos enclos={enclos} zone={zone} />
-
-          <div className='containerH'>
-            {especeslst.map(
-              (especes: Especes) =>
-                especes.enclos === enclos._id && (
-                  <div className='containerV , bordered' key={especes._id}>
-                    <button>
-                      <Link href='/especes/[id]' as={`/especes/${especes._id}`}>
-                        {`${especes.nom}`}
-                      </Link>
-                    </button>
-                  </div>
-                )
-            )}
-          </div>
+          <TableauEvent affichage={event} />
         </>
       )}
       {!IsConnected() && (
@@ -78,11 +81,17 @@ export async function getServerSideProps ({ params }: Params) {
   const zone = await fetch(`${API_adr}zones/${enclos.zone}`).then(res =>
     res.json()
   )
+  const event = tri(
+    await fetch(`${API_adr}evenements/enclos/${params.id}`).then(res =>
+      res.json()
+    )
+  )
   return {
     props: {
       enclos,
       especeslst,
       zone,
+      event,
       API_adr
     }
   }

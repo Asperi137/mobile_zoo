@@ -4,7 +4,6 @@ import ResponseError from 'Types/ResponseError'
 import EspeceM from 'models/especes'
 import EvenementsM from 'models/evenements'
 import Evenements from 'Types/Evenements'
-import Zones from 'Types/Zones'
 import Enclos from 'Types/Enclos'
 
 const API_adr = process.env.API_adr
@@ -64,14 +63,13 @@ export async function agirSurEspeces (
   res: NextApiResponse<Evenements | ResponseError>
 ) {
   const date = Date.now()
-  
- console.log(req.body.espece)
+
+  console.log(req.body.espece)
 
   const espece: Especes = await fetch(
     `${API_adr}especes/${req.body.espece}`
   ).then(res => res.json())
 
- 
   const enclos: Enclos = await fetch(`${API_adr}enclos/${espece.enclos}`).then(
     res => res.json()
   )
