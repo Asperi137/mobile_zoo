@@ -4,15 +4,25 @@ import { UserContext } from 'lib/UserContext'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
+const API_adr = process.env.API_adr
 
 export default function Nav () {
   const { setRole } = useContext(UserContext)
   const router = useRouter()
 
-  const deconection = async () => {
-    setRole('')
-    window.localStorage.removeItem('user')
-    router.push('/')
+  const deconnection = async () => {
+    await fetch(`api/auth/logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ login: '', password: '', role: '' })
+    })
+      .then(res => res.json())
+      .then(() => {
+        setRole('')
+        router.push('/')
+      })
   }
 
   return (
@@ -22,7 +32,7 @@ export default function Nav () {
         <nav>
           <div className={classes.Sepbot}>
             <Link href='/'>
-              <span onClick={deconection}>déconnection</span>
+              <span onClick={deconnection}>déconnection</span>
             </Link>
           </div>
           <div className='containerH'>

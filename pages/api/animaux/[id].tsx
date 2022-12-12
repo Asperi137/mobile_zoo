@@ -3,6 +3,7 @@ import Animaux from 'Types/Animaux'
 import mongooseConnect from 'lib/mongooseConnect'
 import ResponseError from 'Types/ResponseError'
 import { deleteAnimal, getOneAnimal, modifyAnimal } from 'controllers/animaux'
+import { withSessionRoute } from 'lib/withSession'
 
 mongooseConnect()
 
@@ -41,8 +42,11 @@ mongooseConnect()
  *         description: Animal supprimé
  *       404:
  *         description: error
+ *
  */
-export default function Handler (
+export default withSessionRoute(ID)
+
+async function ID (
   req: NextApiRequest,
   res: NextApiResponse<Animaux | ResponseError>
 ) {
@@ -53,19 +57,21 @@ export default function Handler (
       'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
     )
     res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE')
-    switch (req.method) {
-      case 'GET':
-        getOneAnimal(req, res)
-        break
-      case 'PUT':
-        modifyAnimal(req, res)
-        break
-      case 'DELETE':
-        deleteAnimal(req, res)
-        break
-      default:
-        res.setHeader('Allow', ['GET', 'PUT', 'DELETE'])
-        res.status(405).end(`Method ${req.method} Not Allowed`)
-    }
+    if (req.session.user) {
+      switch (req.method) {
+        case 'GET':
+          getOneAnimal(req, res)
+          break
+        case 'PUT':
+          modifyAnimal(req, res)
+          break
+        case 'DELETE':
+          deleteAnimal(req, res)
+          break
+        default:
+          res.setHeader('Allow', ['GET', 'PUT', 'DELETE'])
+          res.status(405).end(`Method ${req.method} Not Allowed`)
+      }
+    } else res.status(401).end(`Utilisateur non autorisé`)
   })
 }

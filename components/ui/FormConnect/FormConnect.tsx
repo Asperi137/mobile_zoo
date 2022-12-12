@@ -11,7 +11,7 @@ export default function FormConnect () {
   const { setRole } = useContext(UserContext)
   const router = useRouter()
 
-  const deconection = async (event: any) => {
+  const deconnection = async (event: any) => {
     setRole('')
     router.push('/')
   }
@@ -20,7 +20,7 @@ export default function FormConnect () {
     event.preventDefault()
     if (!event.target.login.value || !event.target.password.value) {
       alert('Veuiller entrer un login et un mot de passe')
-      deconection(event)
+      deconnection(event)
     } else {
       const data = {
         login: event.target.login.value,
@@ -63,11 +63,6 @@ export default function FormConnect () {
           <input type='password' id='password' name='password' required />
           <br />
           <button type='submit'>Submit</button>
-        </form>
-      )}
-      {IsConnected() && (
-        <form>
-          <button onClick={deconection}>déconnection</button>
         </form>
       )}
       {IsConnected() && IsConnected() === 'admin' && (

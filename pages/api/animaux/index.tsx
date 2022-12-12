@@ -3,6 +3,7 @@ import Animaux from 'Types/Animaux'
 import mongooseConnect from 'lib/mongooseConnect'
 import ResponseError from 'Types/ResponseError'
 import { createAnimal, getAnimaux } from 'controllers/animaux'
+import { withSessionRoute } from 'lib/withSession'
 
 mongooseConnect()
 /**
@@ -30,7 +31,9 @@ mongooseConnect()
  *         description: error
  */
 
-export default function Handler (
+export default withSessionRoute(index)
+
+async function index (
   req: NextApiRequest,
   res: NextApiResponse<Animaux[] | Animaux | ResponseError>
 ) {
@@ -41,16 +44,18 @@ export default function Handler (
       'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
     )
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
-    switch (req.method) {
-      case 'GET':
-        getAnimaux(req, res)
-        break
-      case 'POST':
-        createAnimal(req, res)
-        break
-      default:
-        res.setHeader('Allow', ['GET', 'POST'])
-        res.status(405).end(`Method ${req.method} Not Allowed`)
-    }
+    if (req.session.user) {
+      switch (req.method) {
+        case 'GET':
+          getAnimaux(req, res)
+          break
+        case 'POST':
+          createAnimal(req, res)
+          break
+        default:
+          res.setHeader('Allow', ['GET', 'POST'])
+          res.status(405).end(`Method ${req.method} Not Allowed`)
+      }
+    } else res.status(401).end(`Utilisateur non autorisé`)
   })
 }

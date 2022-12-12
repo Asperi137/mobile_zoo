@@ -1,15 +1,11 @@
+import { withSessionRoute } from 'lib/withSession'
 import { NextApiRequest, NextApiResponse } from 'next'
 import User from 'Types/User'
-import mongooseConnect from 'lib/mongooseConnect'
 import ResponseError from 'Types/ResponseError'
-import { login } from 'controllers/user'
-import { withSessionRoute } from 'lib/withSession'
 
-mongooseConnect()
+export default withSessionRoute(logoutRoute)
 
-export default withSessionRoute(loginRoute)
-
-async function loginRoute (
+async function logoutRoute (
   req: NextApiRequest,
   res: NextApiResponse<User | ResponseError>
 ) {
@@ -22,7 +18,8 @@ async function loginRoute (
     res.setHeader('Access-Control-Allow-Methods', ' POST')
 
     if (req.method === 'POST') {
-      login(req, res)
+      req.session.destroy()
+      res.send({ login: '', password: '', role: '' })
     } else {
       res.setHeader('Allow', ['POST'])
       res.status(405).end(`Method ${req.method} Not Allowed`)

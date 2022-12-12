@@ -38,27 +38,21 @@ export async function login (
       } else {
         bcrypt
           .compare(req.body.password, user.password)
-          .then(valid => {
+          .then(async valid => {
             if (!valid) {
               res.status(401).json({ message: 'login/password incorrecte' })
-            } else if (RANDOM_TOKEN_SECRET) {
-              const token = jsonWebToken.sign(
-                {
-                  role: user.role
-                },
-                RANDOM_TOKEN_SECRET,
-                {
-                  expiresIn: '24h'
-                }
-              )
-              const userJson = {
+            } else {
+              req.session.user = {
                 login: user.login,
-                role: user.role,
-                token: token
+                password: '',
+                role: user.role
               }
-              res.status(200).json(userJson)
-            } else
-              res.status(500).json({ message: 'RANDOM_TOKEN_SECRET manquant' })
+              await req.session.save()
+              res.status(200).json({
+                login: user.login,
+                role: user.role
+              })
+            }
           })
           .catch((error: ResponseError) => res.status(500).json(error))
       }
