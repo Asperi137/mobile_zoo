@@ -3,6 +3,7 @@ import Especes from 'Types/Especes'
 import mongooseConnect from 'lib/mongooseConnect'
 import ResponseError from 'Types/ResponseError'
 import { deleteEspece, getOneEspece, modifyEspece } from 'controllers/especes'
+import { withSessionRoute } from 'lib/withSession'
 
 mongooseConnect()
 /**
@@ -42,7 +43,9 @@ mongooseConnect()
  *         description: error
  */
 
-export default function Handler (
+export default withSessionRoute(ID)
+
+async function ID (
   req: NextApiRequest,
   res: NextApiResponse<Especes | ResponseError>
 ) {
@@ -53,20 +56,21 @@ export default function Handler (
       'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
     )
     res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE')
-
-    switch (req.method) {
-      case 'GET':
-        getOneEspece(req, res)
-        break
-      case 'PUT':
-        modifyEspece(req, res)
-        break
-      case 'DELETE':
-        deleteEspece(req, res)
-        break
-      default:
-        res.setHeader('Allow', ['GET', 'PUT', 'DELETE'])
-        res.status(405).end(`Method ${req.method} Not Allowed`)
-    }
+    if (req.session.user) {
+      switch (req.method) {
+        case 'GET':
+          getOneEspece(req, res)
+          break
+        case 'PUT':
+          modifyEspece(req, res)
+          break
+        case 'DELETE':
+          deleteEspece(req, res)
+          break
+        default:
+          res.setHeader('Allow', ['GET', 'PUT', 'DELETE'])
+          res.status(405).end(`Method ${req.method} Not Allowed`)
+      }
+    } else res.status(401).end(`Utilisateur non autorisé`)
   })
 }

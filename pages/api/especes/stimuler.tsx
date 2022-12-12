@@ -3,6 +3,7 @@ import mongooseConnect from 'lib/mongooseConnect'
 import ResponseError from 'Types/ResponseError'
 import Evenements from 'Types/Evenements'
 import { agirSurEspeces } from 'controllers/especes'
+import { withSessionRoute } from 'lib/withSession'
 
 mongooseConnect()
 const API_adr = process.env.API_adr
@@ -18,7 +19,9 @@ const API_adr = process.env.API_adr
  *       400:
  *         description: error
  */
-export default function Handler (
+export default withSessionRoute(stimuler)
+
+async function stimuler (
   req: NextApiRequest,
   res: NextApiResponse<Evenements | ResponseError>
 ) {
@@ -29,11 +32,13 @@ export default function Handler (
       'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
     )
     res.setHeader('Access-Control-Allow-Methods', 'POST')
-    if (req.method === 'POST') {
-      agirSurEspeces('stimulation', req, res)
-    } else {
-      res.setHeader('Allow', ['POST'])
-      res.status(405).end(`Method ${req.method} Not Allowed ici`)
-    }
+    if (req.session.user) {
+      if (req.method === 'POST') {
+        agirSurEspeces('stimulation', req, res)
+      } else {
+        res.setHeader('Allow', ['POST'])
+        res.status(405).end(`Method ${req.method} Not Allowed ici`)
+      }
+    } else res.status(401).end(`Utilisateur non autorisé`)
   })
 }

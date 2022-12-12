@@ -3,6 +3,7 @@ import Enclos from 'Types/Enclos'
 import mongooseConnect from 'lib/mongooseConnect'
 import ResponseError from 'Types/ResponseError'
 import { deleteEnclos, getOneEnclos, modifyEnclos } from 'controllers/enclos'
+import { withSessionRoute } from 'lib/withSession'
 
 mongooseConnect()
 /**
@@ -42,7 +43,9 @@ mongooseConnect()
  *         description: error
  */
 
-export default function Handler (
+export default withSessionRoute(ID)
+
+async function ID (
   req: NextApiRequest,
   res: NextApiResponse<Enclos | ResponseError>
 ) {
@@ -54,20 +57,22 @@ export default function Handler (
     )
     res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE')
 
-    switch (req.method) {
-      case 'GET':
-        getOneEnclos(req, res)
-        break
-      case 'PUT':
-        modifyEnclos(req, res)
-        break
-      case 'DELETE':
-        deleteEnclos(req, res)
-        break
+    if (req.session.user) {
+      switch (req.method) {
+        case 'GET':
+          getOneEnclos(req, res)
+          break
+        case 'PUT':
+          modifyEnclos(req, res)
+          break
+        case 'DELETE':
+          deleteEnclos(req, res)
+          break
 
-      default:
-        res.setHeader('Allow', ['GET', 'PUT', 'DELETE'])
-        res.status(405).end(`Method ${req.method} Not Allowed`)
-    }
+        default:
+          res.setHeader('Allow', ['GET', 'PUT', 'DELETE'])
+          res.status(405).end(`Method ${req.method} Not Allowed`)
+      }
+    } else res.status(401).end(`Utilisateur non autorisé`)
   })
 }

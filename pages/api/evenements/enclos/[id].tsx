@@ -3,10 +3,12 @@ import mongooseConnect from 'lib/mongooseConnect'
 import ResponseError from 'Types/ResponseError'
 import { getEventsCible } from 'controllers/eventCondition'
 import Evenements from 'Types/Evenements'
+import { withSessionRoute } from 'lib/withSession'
 
 mongooseConnect()
+export default withSessionRoute(ID)
 
-export default function Handler (
+async function ID (
   req: NextApiRequest,
   res: NextApiResponse<Evenements[] | ResponseError>
 ) {
@@ -17,12 +19,13 @@ export default function Handler (
       'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
     )
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
-
-    if (req.method === 'GET') {
-      getEventsCible('enclos', req, res)
-    } else {
-      res.setHeader('Allow', ['GET', 'POST'])
-      res.status(405).end(`Method ${req.method} Not Allowed`)
-    }
+    if (req.session.user) {
+      if (req.method === 'GET') {
+        getEventsCible('enclos', req, res)
+      } else {
+        res.setHeader('Allow', ['GET', 'POST'])
+        res.status(405).end(`Method ${req.method} Not Allowed`)
+      }
+    } else res.status(401).end(`Utilisateur non autorisé`)
   })
 }
