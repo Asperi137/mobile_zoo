@@ -45,11 +45,10 @@ async function index (
       'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
     )
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
-    if (req.session.user) {
+    if (req.method === 'GET') {
+      getEspeces(req, res)
+    } else if (req.session.user) {
       switch (req.method) {
-        case 'GET':
-          getEspeces(req, res)
-          break
         case 'POST':
           createEspece(req, res)
           break

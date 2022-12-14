@@ -57,11 +57,10 @@ async function ID (
     )
     res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE')
 
-    if (req.session.user) {
+    if (req.method === 'GET') {
+      getOneEnclos(req, res)
+    } else if (req.session.user) {
       switch (req.method) {
-        case 'GET':
-          getOneEnclos(req, res)
-          break
         case 'PUT':
           modifyEnclos(req, res)
           break

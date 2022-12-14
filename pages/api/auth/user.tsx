@@ -11,5 +11,5 @@ function userRoute (
   const user = req.session.user
   if (user) {
     res.send(user)
-  } else res.status(404).json({ message: 'User not found' })
+  } else res.status(404).json({ message: 'utilisateur non trouvé' })
 }

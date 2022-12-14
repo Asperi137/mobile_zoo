@@ -2,15 +2,28 @@ import Enclos from 'Types/Enclos'
 import Especes from 'Types/Especes'
 import Link from 'next/link'
 import IsConnected from 'lib/isConnected'
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
+import { withSessionSsr } from 'lib/withSession'
+import User from 'Types/User'
 
 const API_adr = process.env.API_adr
 
-type Props = { enclos: Enclos[]; especes: Especes[] }
+type Props = {
+  enclos: Enclos[]
+  especes: Especes[]
+  user: User
+  headers: Headers
+}
 
-export default function Index ({ enclos, especes }: Props): JSX.Element {
+export default function Index ({
+  enclos,
+  especes,
+  user,
+  headers
+}: Props): JSX.Element {
   return (
     <div className='containerH'>
-      {IsConnected() &&
+      {IsConnected(user) &&
         enclos.map((enclos: Enclos) => (
           <div key={enclos._id} className='containerV , alignCenter , bordered'>
             <Link href='/enclos/[id]' as={`/enclos/${enclos._id}`}>
@@ -30,7 +43,7 @@ export default function Index ({ enclos, especes }: Props): JSX.Element {
             </div>
           </div>
         ))}
-      {!IsConnected() && (
+      {!IsConnected(user) && (
         <button className='btnRetour'>
           <Link href='/'>Veillez vous connecter</Link>
         </button>
@@ -39,17 +52,23 @@ export default function Index ({ enclos, especes }: Props): JSX.Element {
   )
 }
 
-export async function getServerSideProps () {
-  const especes: Especes[] = await fetch(`${API_adr}especes`).then(res =>
-    res.json()
-  )
-  const enclos: Enclos[] = await fetch(`${API_adr}enclos`).then(res =>
-    res.json()
-  )
-  return {
-    props: {
-      enclos,
-      especes
+export const getServerSideProps = withSessionSsr(
+  async function getServerSideProps ({ params, req }: Params) {
+    const headers = req.headers
+    const user = req.session.user
+    const especes: Especes[] = await fetch(`${API_adr}especes`, {
+      headers
+    }).then(res => res.json())
+    const enclos: Enclos[] = await fetch(`${API_adr}enclos`, { headers }).then(
+      res => res.json()
+    )
+    return {
+      props: {
+        enclos,
+        especes,
+        user,
+        headers
+      }
     }
   }
-}
+)

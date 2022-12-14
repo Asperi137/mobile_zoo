@@ -56,11 +56,10 @@ async function ID (
       'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
     )
     res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE')
-    if (req.session.user) {
+    if (req.method === 'GET') {
+      getOneEspece(req, res)
+    } else if (req.session.user) {
       switch (req.method) {
-        case 'GET':
-          getOneEspece(req, res)
-          break
         case 'PUT':
           modifyEspece(req, res)
           break

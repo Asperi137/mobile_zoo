@@ -2,15 +2,28 @@ import Enclos from 'Types/Enclos'
 import Zones from 'Types/Zones'
 import Link from 'next/link'
 import IsConnected from 'lib/isConnected'
+import { withSessionSsr } from 'lib/withSession'
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
+import User from 'Types/User'
 
-type Props = { enclos: Enclos[]; zones: Zones[] }
+type Props = {
+  enclos: Enclos[]
+  zones: Zones[]
+  user: User
+  headers: Headers
+}
 
 const API_adr = process.env.API_adr
 
-export default function Index ({ enclos, zones }: Props): JSX.Element {
+export default function Index ({
+  enclos,
+  zones,
+  user,
+  headers
+}: Props): JSX.Element {
   return (
     <div className='containerH'>
-      {IsConnected() &&
+      {IsConnected(user) &&
         zones.map((zone: Zones) => (
           <div key={zone._id} className='containerV , alignCenter , bordered'>
             <h2 className='description'>{`${zone.nom}`}</h2>
@@ -28,7 +41,7 @@ export default function Index ({ enclos, zones }: Props): JSX.Element {
             </div>
           </div>
         ))}
-      {!IsConnected() && (
+      {!IsConnected(user) && (
         <button className='btnRetour'>
           <Link href='/'>Veillez vous connecter</Link>
         </button>
@@ -37,15 +50,24 @@ export default function Index ({ enclos, zones }: Props): JSX.Element {
   )
 }
 
-export async function getServerSideProps () {
-  const zones: Zones[] = await fetch(`${API_adr}zones`).then(res => res.json())
-  const enclos: Enclos[] = await fetch(`${API_adr}enclos`).then(res =>
-    res.json()
-  )
-  return {
-    props: {
-      enclos,
-      zones
+export const getServerSideProps = withSessionSsr(
+  async function getServerSideProps ({ params, req }: Params) {
+    const headers = req.headers
+    const user = req.session.user
+
+    const zones: Zones[] = await fetch(`${API_adr}zones/`, { headers }).then(
+      res => res.json()
+    )
+    const enclos: Enclos[] = await fetch(`${API_adr}enclos/`, {
+      headers
+    }).then(res => res.json())
+    return {
+      props: {
+        enclos,
+        zones,
+        user,
+        headers
+      }
     }
   }
-}
+)

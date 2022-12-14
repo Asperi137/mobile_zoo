@@ -1,3 +1,5 @@
+export {}
+
 describe('Navigation', () => {
   it('navigué jusqua la page evenenement', () => {
     // Start from the index page

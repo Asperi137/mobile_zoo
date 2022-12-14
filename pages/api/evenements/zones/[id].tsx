@@ -19,13 +19,12 @@ async function ID (
       'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
     )
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
-    if (req.session.user) {
-      if (req.method === 'GET') {
-        getEventsCible('zone', req, res)
-      } else {
-        res.setHeader('Allow', ['GET', 'POST'])
-        res.status(405).end(`Method ${req.method} Not Allowed`)
-      }
-    } else res.status(401).end(`Utilisateur non autorisé`)
+
+    if (req.method === 'GET') {
+      getEventsCible('zone', req, res)
+    } else {
+      res.setHeader('Allow', ['GET', 'POST'])
+      res.status(405).end(`Method ${req.method} Not Allowed`)
+    }
   })
 }

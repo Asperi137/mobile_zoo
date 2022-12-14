@@ -8,6 +8,9 @@ import Animaux from 'Types/Animaux'
 import Zones from 'Types/Zones'
 import Type_evenements from 'Types/Type_evenements'
 import TableauEvent, { tri } from 'components/ui/TableauEvent/TableauEvent'
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
+import { withSessionSsr } from 'lib/withSession'
+import User from 'Types/User'
 
 const API_adr = process.env.API_adr
 
@@ -18,6 +21,8 @@ type Props = {
   enclos: Enclos[]
   zones: Zones[]
   Type_evenements: Type_evenements[]
+  user: User
+  headers: Headers
   API_adr: string
 }
 
@@ -28,6 +33,8 @@ export default function Index ({
   enclos,
   zones,
   Type_evenements,
+  user,
+  headers,
   API_adr
 }: Props) {
   const [affichage, setAffichage] = useState<Evenements[]>(tri(evenements))
@@ -35,7 +42,9 @@ export default function Index ({
   const [choixT, setChoixT] = useState<string>('')
 
   async function filtrage (): Promise<void> {
-    let resu = await fetch(`${API_adr}evenements`).then(res => res.json())
+    let resu = await fetch(`${API_adr}evenements`, {
+      headers
+    }).then(res => res.json())
     if (
       choixT === 'type' ||
       choixT === 'zones' ||
@@ -43,16 +52,16 @@ export default function Index ({
       choixT === 'especes' ||
       choixT === 'animaux'
     ) {
-      resu = await fetch(`${API_adr}evenements/${choixT}/${choix}`).then(res =>
-        res.json()
-      )
+      resu = await fetch(`${API_adr}evenements/${choixT}/${choix}`, {
+        headers
+      }).then(res => res.json())
     }
     setAffichage(tri(resu))
   }
 
   return (
     <>
-      {IsConnected() && (
+      {IsConnected(user) && (
         <>
           <div className='alignCenter'>
             <h2>
@@ -181,7 +190,7 @@ export default function Index ({
           <TableauEvent affichage={affichage} />
         </>
       )}
-      {!IsConnected() && (
+      {!IsConnected(user) && (
         <button className='btnRetour'>
           <Link href='/'>Veillez vous connecter</Link>
         </button>
@@ -190,34 +199,48 @@ export default function Index ({
   )
 }
 
-export async function getServerSideProps () {
-  const evenements: Evenements[] = await fetch(`${API_adr}evenements`).then(
-    res => res.json()
-  )
-  const Type_evenements: Type_evenements[] = await fetch(
-    `${API_adr}evenements/type`
-  ).then(res => res.json())
+export const getServerSideProps = withSessionSsr(
+  async function getServerSideProps ({ params, req }: Params) {
+    const headers = req.headers
+    const user = req.session.user
 
-  const animaux: Animaux[] = await fetch(`${API_adr}animaux`).then(res =>
-    res.json()
-  )
-  const especes: Especes[] = await fetch(`${API_adr}especes`).then(res =>
-    res.json()
-  )
-  const enclos: Enclos[] = await fetch(`${API_adr}enclos`).then(res =>
-    res.json()
-  )
-  const zones: Zones[] = await fetch(`${API_adr}zones`).then(res => res.json())
+    const evenements: Evenements[] = await fetch(`${API_adr}evenements`, {
+      headers
+    }).then(res => res.json())
 
-  return {
-    props: {
-      evenements,
-      animaux,
-      especes,
-      enclos,
-      zones,
-      Type_evenements,
-      API_adr
+    const Type_evenements: Type_evenements[] = await fetch(
+      `${API_adr}evenements/type`,
+      { headers }
+    ).then(res => res.json())
+
+    const animaux: Animaux[] = await fetch(`${API_adr}animaux`, {
+      headers
+    }).then(res => res.json())
+
+    const especes: Especes[] = await fetch(`${API_adr}especes`, {
+      headers
+    }).then(res => res.json())
+
+    const enclos: Enclos[] = await fetch(`${API_adr}enclos`, { headers }).then(
+      res => res.json()
+    )
+
+    const zones: Zones[] = await fetch(`${API_adr}zones`, { headers }).then(
+      res => res.json()
+    )
+
+    return {
+      props: {
+        evenements,
+        animaux,
+        especes,
+        enclos,
+        zones,
+        Type_evenements,
+        user,
+        headers,
+        API_adr
+      }
     }
   }
-}
+)

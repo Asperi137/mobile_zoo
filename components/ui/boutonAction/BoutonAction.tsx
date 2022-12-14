@@ -3,9 +3,19 @@ import { useContext, useState } from 'react'
 
 const API_adr = process.env.API_adr
 
-type props = { cible: string; action: string; API_adr: string }
+type props = {
+  cible: string
+  action: string
+  headers: Headers
+  API_adr: string
+}
 
-export default function BoutonAction ({ cible, action, API_adr }: props) {
+export default function BoutonAction ({
+  cible,
+  action,
+  headers,
+  API_adr
+}: props) {
   const { role } = useContext(UserContext)
   const [verif, setverif] = useState('')
 

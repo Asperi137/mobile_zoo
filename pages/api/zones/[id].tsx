@@ -57,11 +57,10 @@ async function ID (
       'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
     )
     res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE')
-    if (req.session.user) {
+    if (req.method === 'GET') {
+      getOneZone(req, res)
+    } else if (req.session.user) {
       switch (req.method) {
-        case 'GET':
-          getOneZone(req, res)
-          break
         case 'PUT':
           modifyZone(req, res)
           break

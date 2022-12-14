@@ -7,6 +7,7 @@ type props = {
   cible: string
   API_adr: string
   position: string
+  headers: Headers
   setPosition: Dispatch<SetStateAction<string>>
 }
 
@@ -14,6 +15,7 @@ export default function BoutonEntrerSortir ({
   cible,
   API_adr,
   position,
+  headers,
   setPosition
 }: props) {
   const { role } = useContext(UserContext)

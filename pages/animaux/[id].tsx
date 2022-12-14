@@ -13,6 +13,8 @@ import { useState } from 'react'
 import BoutonEntrerSortir from 'components/ui/boutonAction/BoutonEntrerSortir'
 import Evenements from 'Types/Evenements'
 import TableauEvent, { tri } from 'components/ui/TableauEvent/TableauEvent'
+import { withSessionSsr } from 'lib/withSession'
+import User from 'Types/User'
 const API_adr = process.env.API_adr
 
 type props = {
@@ -21,6 +23,8 @@ type props = {
   enclos: Enclos
   zone: Zones
   event: Evenements[]
+  user: User
+  headers: Headers
   API_adr: string
 }
 
@@ -30,13 +34,15 @@ export default function Index ({
   enclos,
   zone,
   event,
+  user,
+  headers,
   API_adr
 }: props): JSX.Element {
   const [position, setPosition] = useState(animal.position)
 
   return (
     <div className='containerV'>
-      {IsConnected() && (
+      {IsConnected(user) && (
         <>
           <button className='btnRetour'>
             <Link href={`/especes/${espece._id}`} as={`/especes/${espece._id}`}>
@@ -51,14 +57,17 @@ export default function Index ({
               <InfoEspece espece={espece} />
               <InfoEnclos enclos={enclos} zone={zone} />
             </div>
-            {(IsConnected() === 'veterinaire' || IsConnected() === 'admin') && (
+            {(IsConnected(user) === 'veterinaire' ||
+              IsConnected(user) === 'admin') && (
               <BoutonAction
+                headers={headers}
                 cible={animal._id}
                 action={'soigner'}
                 API_adr={API_adr}
               />
             )}
             <BoutonEntrerSortir
+              headers={headers}
               cible={animal._id}
               API_adr={API_adr}
               position={position}
@@ -68,7 +77,7 @@ export default function Index ({
           <TableauEvent affichage={event} />
         </>
       )}
-      {!IsConnected() && (
+      {!IsConnected(user) && (
         <button className='btnRetour'>
           <Link href='/'>Veillez vous connecter</Link>
         </button>
@@ -77,33 +86,39 @@ export default function Index ({
   )
 }
 
-export async function getServerSideProps ({ params }: Params) {
-  const animal = await fetch(`${API_adr}animaux/${params.id}`).then(res =>
-    res.json()
-  )
-  const espece = await fetch(`${API_adr}especes/${animal.espece}`).then(res =>
-    res.json()
-  )
-  const enclos = await fetch(`${API_adr}enclos/${espece.enclos}`).then(res =>
-    res.json()
-  )
-  const zone = await fetch(`${API_adr}zones/${enclos.zone}`).then(res =>
-    res.json()
-  )
-  const event = tri(
-    await fetch(`${API_adr}evenements/animaux/${params.id}`).then(res =>
-      res.json()
+export const getServerSideProps = withSessionSsr(
+  async function getServerSideProps ({ params, req }: Params) {
+    const headers = req.headers
+    const user = req.session.user
+    const animal = await fetch(`${API_adr}animaux/${params.id}`, {
+      headers
+    }).then(res => res.json())
+    const espece = await fetch(`${API_adr}especes/${animal.espece}`, {
+      headers
+    }).then(res => res.json())
+    const enclos = await fetch(`${API_adr}enclos/${espece.enclos}`, {
+      headers
+    }).then(res => res.json())
+    const zone = await fetch(`${API_adr}zones/${enclos.zone}`, {
+      headers
+    }).then(res => res.json())
+    const event = tri(
+      await fetch(`${API_adr}evenements/animaux/${params.id}`, {
+        headers
+      }).then(res => res.json())
     )
-  )
 
-  return {
-    props: {
-      animal,
-      espece,
-      enclos,
-      zone,
-      event,
-      API_adr
+    return {
+      props: {
+        animal,
+        espece,
+        enclos,
+        zone,
+        event,
+        user,
+        headers,
+        API_adr
+      }
     }
   }
-}
+)
