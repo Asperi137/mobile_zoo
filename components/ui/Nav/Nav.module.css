@@ -1,5 +1,17 @@
 .Sepbot {
   padding: 0.5em;
-  margin: 0.5em;
   border-bottom: 1px solid white;
+  gap: 1.5em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.contH {
+  padding: 0.5em;
+  margin: 0.5em;
+  gap: 1.5em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }

@@ -29,26 +29,19 @@ export default function Nav () {
     <>
       {!IsConnected() && <Link href='/'>Connection</Link>}
       {IsConnected() && (
-        <nav>
+        <nav className={classes.contH}>
           <div className={classes.Sepbot}>
             <Link href='/'>
               <span onClick={deconnection}>déconnection</span>
             </Link>
           </div>
-          <div className='containerH'>
-            <div className='containerH'>
-              <Link href='/'>Accueil</Link>|
-            </div>
-
-            <div className='containerH'>
-              <Link href='/enclos'>enclos</Link>
-              <Link href='/especes'>especes</Link>
-              <Link href='/animaux'>animaux</Link>|
-            </div>
-
-            <div className='containerH'>
-              <Link href='/evenements'>Evenement</Link>
-            </div>
+          <div className={classes.Sepbot}>
+            <Link href='/enclos'>enclos</Link>
+            <Link href='/especes'>especes</Link>
+            <Link href='/animaux'>animaux</Link>
+          </div>
+          <div className={classes.Sepbot}>
+            <Link href='/evenements'>Evenement</Link>
           </div>
         </nav>
       )}
