@@ -3,9 +3,6 @@ import bcrypt from 'bcrypt'
 import ResponseError from 'Types/ResponseError'
 import User from 'Types/User'
 import UserM from 'models/user'
-import jsonWebToken from 'jsonwebtoken'
-
-const RANDOM_TOKEN_SECRET = process.env.RANDOM_TOKEN_SECRET
 
 export async function signup (
   req: NextApiRequest,
@@ -31,13 +28,19 @@ export async function login (
   req: NextApiRequest,
   res: NextApiResponse<User | ResponseError | any>
 ) {
-  UserM.findOne({ login: req.body.login })
+  let body = req.body
+  if (typeof body === 'string') {
+    body = JSON.parse(req.body)
+  }
+
+  UserM.findOne({ login: body.login })
     .then(user => {
       if (user === null) {
         res.status(401).json({ message: 'login/password incorrecte' })
+        console.log(user)
       } else {
         bcrypt
-          .compare(req.body.password, user.password)
+          .compare(body.password, user.password)
           .then(async valid => {
             if (!valid) {
               res.status(401).json({ message: 'login/password incorrecte' })

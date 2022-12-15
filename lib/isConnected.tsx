@@ -4,7 +4,12 @@ import User from 'Types/User'
 
 export default function IsConnected (user?: User) {
   const { role, setRole } = useContext(UserContext)
-  if (user) setRole(user.role)
+
+  async function connection (role: string) {
+    setRole(role)
+  }
+
+  if (user) connection(user.role)
 
   if (
     role === 'admin' ||

@@ -21,7 +21,7 @@ export default function FormSignUp () {
         role: event.target.role.value
       }
       const JSONdata = JSON.stringify(data)
-      const endpoint = `api/auth/signup`
+      const endpoint = `http://localhost:3000/api/auth/signup`
       const options = {
         method: 'POST',
         headers: {

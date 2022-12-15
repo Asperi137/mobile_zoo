@@ -5,8 +5,6 @@ import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import FormSignUp from './FormSignup'
 
-const API_adr = process.env.API_adr
-
 export default function FormConnect () {
   const { setRole } = useContext(UserContext)
   const router = useRouter()
@@ -14,6 +12,13 @@ export default function FormConnect () {
   const deconnection = async (event: any) => {
     setRole('')
     router.push('/')
+  }
+
+  const connection = async (role: string) => {
+    setRole(role)
+    if (role !== 'admin') {
+      router.push('/enclos')
+    }
   }
 
   const formSubmit = async (event: any) => {
@@ -27,7 +32,7 @@ export default function FormConnect () {
         password: event.target.password.value
       }
       const JSONdata = JSON.stringify(data)
-      const endpoint = `api/auth/login`
+      const endpoint = `http://localhost:3000/api/auth/login`
       const options = {
         method: 'POST',
         headers: {
@@ -41,10 +46,7 @@ export default function FormConnect () {
           if (!response.role) {
             alert(response.message)
           } else {
-            setRole(response.role)
-            if (response.role !== 'admin') {
-              router.push('/enclos')
-            }
+            connection(response.role)
           }
         })
     }
