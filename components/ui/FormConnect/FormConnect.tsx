@@ -1,9 +1,8 @@
+import apiConnect from 'lib/apiConnect'
 import IsConnected from 'lib/isConnected'
 import { UserContext } from 'lib/UserContext'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
-import FormSignUp from './FormSignup'
 
 export default function FormConnect () {
   const { setRole } = useContext(UserContext)
@@ -32,12 +31,9 @@ export default function FormConnect () {
         password: event.target.password.value
       }
       const JSONdata = JSON.stringify(data)
-      const endpoint = `http://localhost:3000/api/auth/login`
+      const endpoint = `${apiConnect()}auth/login`
       const options = {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSONdata
       }
       fetch(endpoint, options)
@@ -66,14 +62,6 @@ export default function FormConnect () {
           <br />
           <button type='submit'>Submit</button>
         </form>
-      )}
-      {IsConnected() && IsConnected() === 'admin' && (
-        <>
-          <FormSignUp />
-          <Link href='api-doc'>
-            <button>api-doc</button>
-          </Link>
-        </>
       )}
     </>
   )

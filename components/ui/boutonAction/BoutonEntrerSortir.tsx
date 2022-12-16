@@ -1,21 +1,16 @@
+import apiConnect from 'lib/apiConnect'
 import { UserContext } from 'lib/UserContext'
 import { Dispatch, SetStateAction, useContext, useState } from 'react'
 
-const API_adr = process.env.API_adr
-
 type props = {
   cible: string
-  API_adr: string
   position: string
-  headers: Headers
   setPosition: Dispatch<SetStateAction<string>>
 }
 
 export default function BoutonEntrerSortir ({
   cible,
-  API_adr,
   position,
-  headers,
   setPosition
 }: props) {
   const { role } = useContext(UserContext)
@@ -43,7 +38,7 @@ export default function BoutonEntrerSortir ({
       },
       body: JSONdata
     }
-    fetch(`${API_adr}${type}/${action}`, options).then(() => {
+    fetch(`${apiConnect()}${type}/${action}`, options).then(() => {
       if (action === 'sortir') {
         setPosition('dehors')
       } else setPosition('dedans')

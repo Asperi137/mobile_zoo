@@ -5,22 +5,15 @@ import IsConnected from 'lib/isConnected'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import { withSessionSsr } from 'lib/withSession'
 import User from 'Types/User'
-
-const API_adr = process.env.API_adr
+import apiConnect from 'lib/apiConnect'
 
 type Props = {
   enclos: Enclos[]
   especes: Especes[]
   user: User
-  headers: Headers
 }
 
-export default function Index ({
-  enclos,
-  especes,
-  user,
-  headers
-}: Props): JSX.Element {
+export default function Index ({ enclos, especes, user }: Props): JSX.Element {
   return (
     <div className='containerH'>
       {IsConnected(user) &&
@@ -56,18 +49,17 @@ export const getServerSideProps = withSessionSsr(
   async function getServerSideProps ({ params, req }: Params) {
     const headers = req.headers
     const user = req.session.user
-    const especes: Especes[] = await fetch(`${API_adr}especes`, {
+    const especes: Especes[] = await fetch(`${apiConnect()}especes`, {
       headers
     }).then(res => res.json())
-    const enclos: Enclos[] = await fetch(`${API_adr}enclos`, { headers }).then(
-      res => res.json()
-    )
+    const enclos: Enclos[] = await fetch(`${apiConnect()}enclos`, {
+      headers
+    }).then(res => res.json())
     return {
       props: {
         enclos,
         especes,
-        user,
-        headers
+        user
       }
     }
   }
