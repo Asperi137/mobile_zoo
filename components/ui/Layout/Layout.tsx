@@ -6,7 +6,7 @@ export default function Layout (props: {
   children: ReactElement | null | undefined
 }) {
   return (
-    <div style={{ display: 'flex', height: '100vh', flexDirection: 'column' }}>
+    <div>
       <Header />
       <div style={{ flexGrow: 1 }}>
         <div className='container'>{props.children}</div>

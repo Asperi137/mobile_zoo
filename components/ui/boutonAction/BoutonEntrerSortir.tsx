@@ -5,12 +5,14 @@ import { Dispatch, SetStateAction, useContext, useState } from 'react'
 type props = {
   cible: string
   position: string
+  headers: Headers
   setPosition: Dispatch<SetStateAction<string>>
 }
 
 export default function BoutonEntrerSortir ({
   cible,
   position,
+  headers,
   setPosition
 }: props) {
   const { role } = useContext(UserContext)
@@ -33,9 +35,7 @@ export default function BoutonEntrerSortir ({
     const JSONdata = JSON.stringify(data)
     const options = {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      credentials: 'include',
       body: JSONdata
     }
     fetch(`${apiConnect()}${type}/${action}`, options).then(() => {

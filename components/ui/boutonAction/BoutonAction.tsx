@@ -1,3 +1,4 @@
+import Cookies from 'cookies'
 import apiConnect from 'lib/apiConnect'
 import { UserContext } from 'lib/UserContext'
 import { useContext, useState } from 'react'
@@ -5,13 +6,14 @@ import { useContext, useState } from 'react'
 type props = {
   cible: string
   action: string
+  headers: Headers
 }
 
-export default function BoutonAction ({ cible, action }: props) {
+export default function BoutonAction ({ cible, action, headers }: props) {
   const { role } = useContext(UserContext)
   const [verif, setverif] = useState('')
 
-  function valider (event: any) {
+  function valider (event: any, headers: Headers) {
     let type = 'especes'
     let data = {}
     event.preventDefault()
@@ -56,17 +58,17 @@ export default function BoutonAction ({ cible, action }: props) {
         }
         break
     }
+
     const JSONdata = JSON.stringify(data)
     const options = {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      credentials: 'include',
       body: JSONdata
     }
-    fetch(`${apiConnect()}${type}/${action}`, options)
-    setverif('')
+
+    fetch(`${apiConnect()}${type}/${action}`, options).then(() => setverif(''))
   }
+
   function annuler (event: any) {
     event.preventDefault()
     setverif('')
@@ -79,7 +81,7 @@ export default function BoutonAction ({ cible, action }: props) {
         <form
           className='containerV'
           id={action}
-          onSubmit={valider}
+          onSubmit={event => valider(event, headers)}
           method='POST'
         >
           <input

@@ -3,16 +3,16 @@ import IsConnected from 'lib/isConnected'
 import { UserContext } from 'lib/UserContext'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useContext } from 'react'
-import apiConnect from 'lib/apiConnect'
+import { useContext, useState } from 'react'
 
 export default function Nav () {
   const { setRole } = useContext(UserContext)
+  const [open, setOpen] = useState(false)
 
   const router = useRouter()
 
   const deconnection = () => {
-    fetch(`${apiConnect()}auth/logout`, {
+    fetch(`/api/logout`, {
       method: 'POST',
       body: JSON.stringify({ login: '', password: '', role: '' })
     })
@@ -25,22 +25,36 @@ export default function Nav () {
 
   return (
     <>
-      {!IsConnected() && <Link href='/'>Connection</Link>}
+      {!IsConnected() && (
+        <nav className={classes.contH}>
+          <Link href='/'>Connection</Link>
+        </nav>
+      )}
       {IsConnected() && (
         <nav className={classes.contH}>
-          <div className={classes.Sepbot}>
-            <Link href='/'>
-              <span onClick={deconnection}>déconnection</span>
-            </Link>
-          </div>
-          <div className={classes.Sepbot}>
-            <Link href='/enclos'>enclos</Link>
-            <Link href='/especes'>especes</Link>
-            <Link href='/animaux'>animaux</Link>
-          </div>
-          <div className={classes.Sepbot}>
-            <Link href='/evenements'>Evenement</Link>
-          </div>
+          {!open && <button onClick={() => setOpen(!open)}>Navigation</button>}
+          {open && (
+            <>
+              <div className={classes.contH}>
+                <Link href='/'>
+                  <span onClick={deconnection}>déconnection</span>
+                </Link>
+              </div>
+              <button onClick={() => setOpen(!open)}>Navigation</button>
+              <div className={classes.contH}>
+                <div className={classes.contH}>
+                  <Link href='/enclos'>enclos</Link>
+
+                  <Link href='/especes'>especes</Link>
+
+                  <Link href='/animaux'>animaux</Link>
+                </div>
+                <div className={classes.contH}>
+                  <Link href='/evenements'>Evenement</Link>
+                </div>
+              </div>
+            </>
+          )}
         </nav>
       )}
     </>

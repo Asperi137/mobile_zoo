@@ -12,7 +12,6 @@ import InfoAnimal from 'components/ui/barreInfo/InfoAnimal'
 import { useState } from 'react'
 import BoutonEntrerSortir from 'components/ui/boutonAction/BoutonEntrerSortir'
 import Evenements from 'Types/Evenements'
-import TableauEvent, { tri } from 'components/ui/TableauEvent/TableauEvent'
 import { withSessionSsr } from 'lib/withSession'
 import User from 'Types/User'
 import apiConnect from 'lib/apiConnect'
@@ -22,7 +21,6 @@ type props = {
   espece: Especes
   enclos: Enclos
   zone: Zones
-  event: Evenements[]
   user: User
   headers: Headers
 }
@@ -32,7 +30,6 @@ export default function Index ({
   espece,
   enclos,
   zone,
-  event,
   user,
   headers
 }: props): JSX.Element {
@@ -42,30 +39,32 @@ export default function Index ({
     <div className='containerV'>
       {IsConnected(user) && (
         <>
-          <button className='btnRetour'>
+          <button className='btnRetour,alignCenter'>
             <Link href={`/especes/${espece._id}`} as={`/especes/${espece._id}`}>
               {`retour à l'especes : ${espece.nom} `}
             </Link>
           </button>
+          <h2 className='alignCenter'>{animal.nom}</h2>
 
-          <div className='containerV'>
-            <div className='containerH'>
-              <h2 className='alignCenter'>{animal.nom}</h2>
-              <InfoAnimal animal={animal} position={position} />
-              <InfoEspece espece={espece} />
-              <InfoEnclos enclos={enclos} zone={zone} />
-            </div>
-            {(IsConnected(user) === 'veterinaire' ||
-              IsConnected(user) === 'admin') && (
-              <BoutonAction cible={animal._id} action={'soigner'} />
-            )}
-            <BoutonEntrerSortir
-              cible={animal._id}
-              position={position}
-              setPosition={setPosition}
-            />
+          <div className='alignCenter'>
+            <InfoAnimal animal={animal} position={position} />
+            <InfoEspece espece={espece} />
+            <InfoEnclos enclos={enclos} zone={zone} />
           </div>
-          <TableauEvent affichage={event} />
+          {(IsConnected(user) === 'veterinaire' ||
+            IsConnected(user) === 'admin') && (
+            <BoutonAction
+              headers={headers}
+              cible={animal._id}
+              action={'soigner'}
+            />
+          )}
+          <BoutonEntrerSortir
+            headers={headers}
+            cible={animal._id}
+            position={position}
+            setPosition={setPosition}
+          />
         </>
       )}
       {!IsConnected(user) && (
@@ -93,11 +92,6 @@ export const getServerSideProps = withSessionSsr(
     const zone = await fetch(`${apiConnect()}zones/${enclos.zone}`, {
       headers
     }).then(res => res.json())
-    const event = tri(
-      await fetch(`${apiConnect()}evenements/animaux/${params.id}`, {
-        headers
-      }).then(res => res.json())
-    )
 
     return {
       props: {
@@ -105,7 +99,6 @@ export const getServerSideProps = withSessionSsr(
         espece,
         enclos,
         zone,
-        event,
         user,
         headers
       }

@@ -19,7 +19,6 @@ type props = {
   espece: Especes
   enclos: Enclos
   zone: Zones
-  event: Evenements[]
   user: User
   headers: Headers
 }
@@ -29,7 +28,6 @@ export default function Index ({
   espece,
   enclos,
   zone,
-  event,
   user,
   headers
 }: props): JSX.Element {
@@ -37,7 +35,7 @@ export default function Index ({
     <div className='containerV'>
       {IsConnected(user) && (
         <>
-          <button className='btnRetour'>
+          <button className='btnRetour,alignCenter'>
             <Link
               href={`/enclos/${espece.enclos}`}
               as={`/enclos/${espece.enclos}`}
@@ -45,33 +43,36 @@ export default function Index ({
               {`retour à l'enclos : ${enclos.nom} `}
             </Link>
           </button>
-          <div className='containerH'>
-            <h2 className='alignCenter'>{espece.nom}</h2>
+          <h2 className='alignCenter'>{espece.nom}</h2>
+
+          <div className='alignCenter'>
             <InfoEnclos enclos={enclos} zone={zone} />
             <InfoEspece espece={espece} />
-            <div className='containerV'>
+
+            <div className='alignCenter'>
               {animaux.map(
                 (animal: Animaux) =>
                   animal.espece === espece._id && (
-                    <div key={animal._id}>
-                      <button>
-                        <Link
-                          href='/animaux/[id]'
-                          as={`/animaux/${animal._id}`}
-                        >
-                          {`${animal.nom}`}
-                        </Link>
-                      </button>
-                    </div>
+                    <button>
+                      <Link href='/animaux/[id]' as={`/animaux/${animal._id}`}>
+                        {`${animal.nom}`}
+                      </Link>
+                    </button>
                   )
               )}
             </div>
           </div>
-          <div className='containerV'>
-            <BoutonAction cible={espece._id} action={'nourrir'} />
-            <BoutonAction cible={espece._id} action={'stimuler'} />
-          </div>
-          <TableauEvent affichage={event} />
+
+          <BoutonAction
+            headers={headers}
+            cible={espece._id}
+            action={'nourrir'}
+          />
+          <BoutonAction
+            headers={headers}
+            cible={espece._id}
+            action={'stimuler'}
+          />
         </>
       )}
       {!IsConnected() && (
@@ -102,18 +103,14 @@ export const getServerSideProps = withSessionSsr(
     const animaux = await fetch(`${apiConnect()}animaux`, { headers }).then(
       res => res.json()
     )
-    const event = tri(
-      await fetch(`${apiConnect()}evenements/especes/${params.id}`, {
-        headers
-      }).then(res => res.json())
-    )
+
     return {
       props: {
         animaux,
         espece,
         enclos,
         zone,
-        event,
+
         user,
         headers
       }

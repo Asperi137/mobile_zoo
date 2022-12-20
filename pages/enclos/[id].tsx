@@ -6,8 +6,6 @@ import Especes from 'Types/Especes'
 import Zones from 'Types/Zones'
 import IsConnected from 'lib/isConnected'
 import BoutonAction from 'components/ui/boutonAction/BoutonAction'
-import TableauEvent, { tri } from 'components/ui/TableauEvent/TableauEvent'
-import Evenements from 'Types/Evenements'
 import { withSessionSsr } from 'lib/withSession'
 import User from 'Types/User'
 import apiConnect from 'lib/apiConnect'
@@ -16,7 +14,6 @@ type props = {
   enclos: Enclos
   especeslst: Especes[]
   zone: Zones
-  event: Evenements[]
   user: User
   headers: Headers
 }
@@ -25,7 +22,7 @@ export default function Index ({
   enclos,
   especeslst,
   zone,
-  event,
+
   user,
   headers
 }: props): JSX.Element {
@@ -33,16 +30,17 @@ export default function Index ({
     <div className='containerV'>
       {IsConnected(user) && (
         <>
-          <button className='btnRetour'>
+          <button className='btnRetour,alignCenter'>
             <Link href={`/enclos`} as={`/enclos`}>
               {`retour à la liste des enclos `}
             </Link>
           </button>
-          <div className='containerH'>
-            <h2 className='alignCenter'>{enclos.nom}</h2>
+          <h2 className='alignCenter'>{enclos.nom}</h2>
+
+          <div className='alignCenter'>
             <InfoEnclos enclos={enclos} zone={zone} />
 
-            <div className='containerV'>
+            <div className='alignCenter'>
               {especeslst.map(
                 (especes: Especes) =>
                   especes.enclos === enclos._id && (
@@ -58,9 +56,12 @@ export default function Index ({
           {(IsConnected(user) === 'veterinaire' ||
             IsConnected(user) === 'responssableZone' ||
             IsConnected(user) === 'admin') && (
-            <BoutonAction cible={enclos._id} action={'verifier'} />
+            <BoutonAction
+              cible={enclos._id}
+              action={'verifier'}
+              headers={headers}
+            />
           )}
-          <TableauEvent affichage={event} />
         </>
       )}
       {!IsConnected(user) && (
@@ -87,17 +88,12 @@ export const getServerSideProps = withSessionSsr(
       headers
     }).then(res => res.json())
 
-    const event = tri(
-      await fetch(`${apiConnect()}evenements/enclos/${params.id}`, {
-        headers
-      }).then(res => res.json())
-    )
     return {
       props: {
         enclos,
         especeslst,
         zone,
-        event,
+
         user,
         headers
       }

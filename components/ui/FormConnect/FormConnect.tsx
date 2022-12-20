@@ -1,8 +1,15 @@
+import { request } from 'http'
 import apiConnect from 'lib/apiConnect'
 import IsConnected from 'lib/isConnected'
 import { UserContext } from 'lib/UserContext'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
+
+/*--------------------------------------------
+
+@TODO gerrer la creation de session avec iron session 
+
+--------------------------------------------*/
 
 export default function FormConnect () {
   const { setRole } = useContext(UserContext)
@@ -15,9 +22,8 @@ export default function FormConnect () {
 
   const connection = async (role: string) => {
     setRole(role)
-    if (role !== 'admin') {
-      router.push('/enclos')
-    }
+
+    router.push('/enclos')
   }
 
   const formSubmit = async (event: any) => {
@@ -31,11 +37,12 @@ export default function FormConnect () {
         password: event.target.password.value
       }
       const JSONdata = JSON.stringify(data)
-      const endpoint = `${apiConnect()}auth/login`
+      const endpoint = `/api/login`
       const options = {
         method: 'POST',
         body: JSONdata
       }
+
       fetch(endpoint, options)
         .then(result => result.json())
         .then(response => {

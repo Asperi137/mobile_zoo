@@ -18,9 +18,7 @@ export default function Header (): JSX.Element {
             justifyContent: 'space-between'
           }}
         >
-          <h1 style={{ margin: 0 }}>
-            <Link href='/'>Mon Zoo Mobile !</Link>
-          </h1>
+          <h1>Mon Zoo Mobile !</h1>
           <Nav />
         </div>
       </header>
