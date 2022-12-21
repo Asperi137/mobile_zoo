@@ -46,11 +46,6 @@ export default function Index ({
           </button>
           <h2 className='alignCenter'>{animal.nom}</h2>
 
-          <div className='alignCenter'>
-            <InfoAnimal animal={animal} position={position} />
-            <InfoEspece espece={espece} />
-            <InfoEnclos enclos={enclos} zone={zone} />
-          </div>
           {(IsConnected(user) === 'veterinaire' ||
             IsConnected(user) === 'admin') && (
             <BoutonAction
@@ -72,6 +67,11 @@ export default function Index ({
           <Link href='/'>Veillez vous connecter</Link>
         </button>
       )}
+      <div className='alignCenter'>
+        <InfoAnimal animal={animal} position={position} />
+        <InfoEspece espece={espece} />
+        <InfoEnclos enclos={enclos} zone={zone} />
+      </div>
     </div>
   )
 }

@@ -1,28 +1,27 @@
-import { request } from 'http'
-import apiConnect from 'lib/apiConnect'
 import IsConnected from 'lib/isConnected'
 import { UserContext } from 'lib/UserContext'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
-
-/*--------------------------------------------
-
-@TODO gerrer la creation de session avec iron session 
-
---------------------------------------------*/
+import Link from 'next/link'
 
 export default function FormConnect () {
   const { setRole } = useContext(UserContext)
   const router = useRouter()
 
-  const deconnection = async (event: any) => {
-    setRole('')
-    router.push('/')
+  const deconnection = () => {
+    fetch(`/api/logout`, {
+      method: 'POST',
+      body: JSON.stringify({ login: '', password: '', role: '' })
+    })
+      .then(res => res.json())
+      .then(() => {
+        setRole('')
+        router.push('/')
+      })
   }
 
   const connection = async (role: string) => {
     setRole(role)
-
     router.push('/enclos')
   }
 
@@ -30,7 +29,7 @@ export default function FormConnect () {
     event.preventDefault()
     if (!event.target.login.value || !event.target.password.value) {
       alert('Veuiller entrer un login et un mot de passe')
-      deconnection(event)
+      deconnection()
     } else {
       const data = {
         login: event.target.login.value,
@@ -69,6 +68,13 @@ export default function FormConnect () {
           <br />
           <button type='submit'>Submit</button>
         </form>
+      )}
+      {IsConnected() && (
+        <div className='alignCenter'>
+          <Link href='/'>
+            <button onClick={deconnection}>déconnection</button>
+          </Link>
+        </div>
       )}
     </>
   )

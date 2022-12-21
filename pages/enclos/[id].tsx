@@ -22,7 +22,6 @@ export default function Index ({
   enclos,
   especeslst,
   zone,
-
   user,
   headers
 }: props): JSX.Element {
@@ -38,21 +37,18 @@ export default function Index ({
           <h2 className='alignCenter'>{enclos.nom}</h2>
 
           <div className='alignCenter'>
-            <InfoEnclos enclos={enclos} zone={zone} />
-
-            <div className='alignCenter'>
-              {especeslst.map(
-                (especes: Especes) =>
-                  especes.enclos === enclos._id && (
-                    <button>
-                      <Link href='/especes/[id]' as={`/especes/${especes._id}`}>
-                        {`${especes.nom}`}
-                      </Link>
-                    </button>
-                  )
-              )}
-            </div>
+            {especeslst.map(
+              (especes: Especes) =>
+                especes.enclos === enclos._id && (
+                  <button>
+                    <Link href='/especes/[id]' as={`/especes/${especes._id}`}>
+                      {`${especes.nom}`}
+                    </Link>
+                  </button>
+                )
+            )}
           </div>
+
           {(IsConnected(user) === 'veterinaire' ||
             IsConnected(user) === 'responssableZone' ||
             IsConnected(user) === 'admin') && (
@@ -69,6 +65,9 @@ export default function Index ({
           <Link href='/'>Veillez vous connecter</Link>
         </button>
       )}
+      <div className='alignCenter'>
+        <InfoEnclos enclos={enclos} zone={zone} />
+      </div>
     </div>
   )
 }

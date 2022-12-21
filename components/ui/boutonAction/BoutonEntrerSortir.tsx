@@ -33,7 +33,7 @@ export default function BoutonEntrerSortir ({
     }
 
     const JSONdata = JSON.stringify(data)
-    const options = {
+    const options: RequestInit = {
       method: 'POST',
       credentials: 'include',
       body: JSONdata

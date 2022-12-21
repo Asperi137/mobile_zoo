@@ -1,8 +1,18 @@
 .contH {
-  padding: 0.5em;
-  margin: 0.5em;
-  gap: 2em;
+  gap: 0.5em;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.lstV {
+  font-size: smaller;
+  max-height: 300px;
+  overflow-y: scroll;
+  scrollbar-color: black;
+  scrollbar-width: thin;
+  gap: 1em;
+  display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
 }

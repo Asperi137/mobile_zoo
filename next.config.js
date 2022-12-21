@@ -6,7 +6,13 @@ const withTM = require('next-transpile-modules')([
 ])
 
 const nextConfig = {
-  reactStrictMode: true
+  reactStrictMode: true,
+  swcMinify: true,
+  experimental: {
+    images: {
+      unoptimized: true
+    }
+  }
 }
 
 module.exports = withTM(nextConfig)

@@ -14,15 +14,17 @@ type Props = {
 }
 
 export default function Index ({ enclos, especes, user }: Props): JSX.Element {
+  enclos.sort((a, b) => a.nom.localeCompare(b.nom))
+  especes.sort((a, b) => a.nom.localeCompare(b.nom))
   return (
-    <div className='containerH'>
+    <div className='containerV'>
       {IsConnected(user) &&
         enclos.map((enclos: Enclos) => (
           <div key={enclos._id} className='containerV , alignCenter , bordered'>
             <Link href='/enclos/[id]' as={`/enclos/${enclos._id}`}>
               <h2 className='description'>{`${enclos.nom}`}</h2>
             </Link>
-            <div className='containerV'>
+            <div>
               {especes.map(
                 (especes: Especes) =>
                   especes.enclos === enclos._id && (

@@ -6,12 +6,15 @@ type props = {
   position: string
 }
 
-export default function infoEnclos ({ animal, position }: props): JSX.Element {
+export default function infoAnimal ({ animal, position }: props): JSX.Element {
   return (
     <div className={`${classes.infobarre}`}>
-      sexe : {`${animal.sexe}`}
-      <br />
-      {`${position}`}
+      <details>
+        <summary> {`${animal.nom}`}</summary>
+        sexe : {`${animal.sexe}`}
+        <br />
+        {`${position}`}
+      </details>
     </div>
   )
 }

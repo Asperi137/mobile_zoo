@@ -46,21 +46,16 @@ export default function Index ({
           <h2 className='alignCenter'>{espece.nom}</h2>
 
           <div className='alignCenter'>
-            <InfoEnclos enclos={enclos} zone={zone} />
-            <InfoEspece espece={espece} />
-
-            <div className='alignCenter'>
-              {animaux.map(
-                (animal: Animaux) =>
-                  animal.espece === espece._id && (
-                    <button>
-                      <Link href='/animaux/[id]' as={`/animaux/${animal._id}`}>
-                        {`${animal.nom}`}
-                      </Link>
-                    </button>
-                  )
-              )}
-            </div>
+            {animaux.map(
+              (animal: Animaux) =>
+                animal.espece === espece._id && (
+                  <button>
+                    <Link href='/animaux/[id]' as={`/animaux/${animal._id}`}>
+                      {`${animal.nom}`}
+                    </Link>
+                  </button>
+                )
+            )}
           </div>
 
           <BoutonAction
@@ -80,6 +75,10 @@ export default function Index ({
           <Link href='/'>Veillez vous connecter</Link>
         </button>
       )}
+      <div className='alignCenter'>
+        <InfoEnclos enclos={enclos} zone={zone} />
+        <InfoEspece espece={espece} />
+      </div>
     </div>
   )
 }

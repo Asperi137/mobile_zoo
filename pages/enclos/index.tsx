@@ -14,13 +14,16 @@ type Props = {
 }
 
 export default function Index ({ enclos, zones, user }: Props): JSX.Element {
+  enclos.sort((a, b) => a.nom.localeCompare(b.nom))
+  zones.sort((a, b) => a.nom.localeCompare(b.nom))
+
   return (
-    <div className='containerH'>
+    <div className='containerV'>
       {IsConnected(user) &&
         zones.map((zone: Zones) => (
           <div key={zone._id} className='containerV , alignCenter , bordered'>
             <h2 className='description'>{`${zone.nom}`}</h2>
-            <div className='containerV'>
+            <div>
               {enclos.map(
                 (enclos: Enclos) =>
                   enclos.zone === zone._id && (

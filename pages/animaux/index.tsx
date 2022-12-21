@@ -14,15 +14,17 @@ type Props = {
 }
 
 export default function Index ({ animaux, especes, user }: Props): JSX.Element {
+  animaux.sort((a, b) => a.nom.localeCompare(b.nom))
+  especes.sort((a, b) => a.nom.localeCompare(b.nom))
   return (
-    <div className='containerH'>
+    <div className='containerV'>
       {IsConnected(user) &&
         especes.map((espece: Especes) => (
           <div key={espece._id} className='containerV , alignCenter , bordered'>
             <Link href='/especes/[id]' as={`/especes/${espece._id}`}>
               <h2 className='description'>{`${espece.nom}`}</h2>
             </Link>
-            <div className='containerV'>
+            <div>
               {animaux.map(
                 (animal: Animaux) =>
                   animal.espece === espece._id && (

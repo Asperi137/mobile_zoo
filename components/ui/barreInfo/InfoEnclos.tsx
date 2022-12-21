@@ -7,14 +7,15 @@ type props = { enclos: Enclos; zone: Zones }
 export default function infoEnclos ({ enclos, zone }: props): JSX.Element {
   return (
     <div className={`${classes.infobarre}`}>
-      {`${enclos.nom}`}
-      <br />
-      {`${zone.nom}`}
-      <br />
-      {`superficie : ${enclos.superficie} m²`}
-      <br />
-      {`${enclos.coordonnées}`}
-      <br />
+      <details>
+        <summary> {`${enclos.nom}`}</summary>
+        {`${zone.nom}`}
+        <br />
+        {`superficie : ${enclos.superficie} m²`}
+        <br />
+        {`${enclos.coordonnées}`}
+        <br />
+      </details>
     </div>
   )
 }

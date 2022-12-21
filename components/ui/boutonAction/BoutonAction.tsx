@@ -1,4 +1,3 @@
-import Cookies from 'cookies'
 import apiConnect from 'lib/apiConnect'
 import { UserContext } from 'lib/UserContext'
 import { useContext, useState } from 'react'
@@ -60,13 +59,14 @@ export default function BoutonAction ({ cible, action, headers }: props) {
     }
 
     const JSONdata = JSON.stringify(data)
-    const options = {
+    const options: RequestInit = {
       method: 'POST',
       credentials: 'include',
       body: JSONdata
     }
 
-    fetch(`${apiConnect()}${type}/${action}`, options).then(() => setverif(''))
+    let req = new Request(`${apiConnect()}${type}/${action}`, options)
+    fetch(req).then(() => setverif(''))
   }
 
   function annuler (event: any) {

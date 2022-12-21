@@ -32,7 +32,6 @@ async function login (
   if (typeof body === 'string') {
     body = JSON.parse(req.body)
   }
-  console.log(body.login)
   const data = {
     login: body.login,
     password: body.password

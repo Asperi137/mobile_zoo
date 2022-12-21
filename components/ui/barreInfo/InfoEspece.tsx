@@ -12,16 +12,17 @@ function isDanger (espece: Especes) {
   else return 'inoffensif'
 }
 
-export default function infoEnclos ({ espece }: props): JSX.Element {
+export default function infoEspeces ({ espece }: props): JSX.Element {
   return (
     <div className={`${classes.infobarre}`}>
-      {`${espece.nom}`}
-      <br />
-      {`${isSociable(espece)} `}
-      <br />
-      {`${isDanger(espece)}`}
-      <br />
-      {`${espece.observations}`}
+      <details>
+        <summary> {`${espece.nom}`}</summary>
+        {`${isSociable(espece)} `}
+        <br />
+        {`${isDanger(espece)}`}
+        <br />
+        {`${espece.observations}`}
+      </details>
     </div>
   )
 }

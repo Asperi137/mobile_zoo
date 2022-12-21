@@ -1,18 +1,9 @@
 .Header {
-  background-color: black;
+  background-color: teal;
   color: white;
-  padding: 1em;
-}
-
-.Header nav a {
-  text-transform: uppercase;
-  color: white;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: all 0.3s;
-  font-weight: bold;
-}
-
-.Header nav a:hover {
-  color: black;
+  text-align: center;
+  padding: 0.5em 1em 0.5em 1em;
+  border-bottom-left-radius: 3em;
+  border-bottom-right-radius: 3em;
+  width: 100%;
 }
