@@ -15,12 +15,14 @@ import Evenements from 'Types/Evenements'
 import { withSessionSsr } from 'lib/withSession'
 import User from 'Types/User'
 import apiConnect from 'lib/apiConnect'
+import TableauEvent, { tri } from 'components/ui/TableauEvent/TableauEvent'
 
 type props = {
   animal: Animaux
   espece: Especes
   enclos: Enclos
   zone: Zones
+  event: Evenements[]
   user: User
   headers: Headers
 }
@@ -30,6 +32,7 @@ export default function Index ({
   espece,
   enclos,
   zone,
+  event,
   user,
   headers
 }: props): JSX.Element {
@@ -60,6 +63,18 @@ export default function Index ({
             position={position}
             setPosition={setPosition}
           />
+
+          <div className='alignCenter'>
+            <InfoAnimal animal={animal} position={position} />
+            <InfoEspece espece={espece} />
+            <InfoEnclos enclos={enclos} zone={zone} />
+          </div>
+          <div className='alignCenter'>
+            <details className='bordered'>
+              <summary> {`Evenements`}</summary>
+              <TableauEvent affichage={event} pageEvent={'animal'} />
+            </details>
+          </div>
         </>
       )}
       {!IsConnected(user) && (
@@ -67,11 +82,6 @@ export default function Index ({
           <Link href='/'>Veillez vous connecter</Link>
         </button>
       )}
-      <div className='alignCenter'>
-        <InfoAnimal animal={animal} position={position} />
-        <InfoEspece espece={espece} />
-        <InfoEnclos enclos={enclos} zone={zone} />
-      </div>
     </div>
   )
 }
@@ -92,6 +102,11 @@ export const getServerSideProps = withSessionSsr(
     const zone = await fetch(`${apiConnect()}zones/${enclos.zone}`, {
       headers
     }).then(res => res.json())
+    const event = tri(
+      await fetch(`${apiConnect()}evenements/animaux/${params.id}`, {
+        headers
+      }).then(res => res.json())
+    )
 
     return {
       props: {
@@ -99,6 +114,7 @@ export const getServerSideProps = withSessionSsr(
         espece,
         enclos,
         zone,
+        event,
         user,
         headers
       }

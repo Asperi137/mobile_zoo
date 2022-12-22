@@ -1,6 +1,5 @@
 import classes from './Nav.module.css'
 import IsConnected from 'lib/isConnected'
-import Link from 'next/link'
 import NavEnclos from './NavEnclos'
 import NavEspeces from './NavEspeces'
 import { useState } from 'react'
@@ -19,13 +18,12 @@ export default function Nav () {
     <>
       {IsConnected() && (
         <>
-          {affichage === 'enclos' && <NavEnclos />}
-          {affichage === 'especes' && <NavEspeces />}
-          {affichage === 'animaux' && <NavAnimaux />}
+          <div onClick={event => modifAffichage(event)}>
+            {affichage === 'enclos' && <NavEnclos />}
+            {affichage === 'especes' && <NavEspeces />}
+            {affichage === 'animaux' && <NavAnimaux />}
+          </div>
           <nav className={classes.contH}>
-            <Link href='/evenements'>
-              <button>Evenement</button>
-            </Link>
             <button onClick={event => modifAffichage(event)} name='enclos'>
               Enclos
             </button>

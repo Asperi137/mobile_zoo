@@ -71,9 +71,8 @@ export default function FormConnect () {
       )}
       {IsConnected() && (
         <div className='alignCenter'>
-          <Link href='/'>
-            <button onClick={deconnection}>déconnection</button>
-          </Link>
+          <h2>Bienvenue au ZOO !</h2>
+          <button onClick={deconnection}>déconnection</button>
         </div>
       )}
     </>

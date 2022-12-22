@@ -19,6 +19,7 @@ type props = {
   espece: Especes
   enclos: Enclos
   zone: Zones
+  event: Evenements[]
   user: User
   headers: Headers
 }
@@ -28,6 +29,7 @@ export default function Index ({
   espece,
   enclos,
   zone,
+  event,
   user,
   headers
 }: props): JSX.Element {
@@ -44,7 +46,6 @@ export default function Index ({
             </Link>
           </button>
           <h2 className='alignCenter'>{espece.nom}</h2>
-
           <div className='alignCenter'>
             {animaux.map(
               (animal: Animaux) =>
@@ -57,7 +58,6 @@ export default function Index ({
                 )
             )}
           </div>
-
           <BoutonAction
             headers={headers}
             cible={espece._id}
@@ -68,17 +68,24 @@ export default function Index ({
             cible={espece._id}
             action={'stimuler'}
           />
+          <div className='alignCenter'>
+            <InfoEnclos enclos={enclos} zone={zone} />
+            <InfoEspece espece={espece} />
+          </div>{' '}
+          <div className='alignCenter'>
+            <details className='bordered'>
+              <summary> {`Evenements`}</summary>
+              <TableauEvent affichage={event} pageEvent='especes' />
+            </details>
+          </div>
         </>
       )}
+
       {!IsConnected() && (
         <button className='btnRetour'>
           <Link href='/'>Veillez vous connecter</Link>
         </button>
       )}
-      <div className='alignCenter'>
-        <InfoEnclos enclos={enclos} zone={zone} />
-        <InfoEspece espece={espece} />
-      </div>
     </div>
   )
 }
@@ -102,14 +109,18 @@ export const getServerSideProps = withSessionSsr(
     const animaux = await fetch(`${apiConnect()}animaux`, { headers }).then(
       res => res.json()
     )
-
+    const event = tri(
+      await fetch(`${apiConnect()}evenements/especes/${params.id}`, {
+        headers
+      }).then(res => res.json())
+    )
     return {
       props: {
         animaux,
         espece,
         enclos,
         zone,
-
+        event,
         user,
         headers
       }

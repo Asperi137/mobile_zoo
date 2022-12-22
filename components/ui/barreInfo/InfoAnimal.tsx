@@ -1,4 +1,3 @@
-import classes from './barreInfo.module.css'
 import Animaux from 'Types/Animaux'
 
 type props = {
@@ -8,7 +7,7 @@ type props = {
 
 export default function infoAnimal ({ animal, position }: props): JSX.Element {
   return (
-    <div className={`${classes.infobarre}`}>
+    <div className={`bordered`}>
       <details>
         <summary> {`${animal.nom}`}</summary>
         sexe : {`${animal.sexe}`}

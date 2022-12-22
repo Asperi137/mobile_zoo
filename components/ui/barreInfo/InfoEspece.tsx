@@ -14,7 +14,7 @@ function isDanger (espece: Especes) {
 
 export default function infoEspeces ({ espece }: props): JSX.Element {
   return (
-    <div className={`${classes.infobarre}`}>
+    <div className={`bordered`}>
       <details>
         <summary> {`${espece.nom}`}</summary>
         {`${isSociable(espece)} `}
