@@ -14,9 +14,7 @@ export default function Layout (props: {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Header />
-      <div style={{ flexGrow: 1 }}>
-        <div className='container'>{props.children}</div>
-      </div>
+      <div className='container'>{props.children}</div>
       <Footer />
     </>
   )

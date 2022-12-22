@@ -17,10 +17,12 @@ export default function BarreRecherche () {
   return (
     <>
       {IsConnected() && (
-        <form id='login' onSubmit={formSubmit}>
-          <input type='search' id='recherche' name='recherche' required />
-          <button type='submit'>rechercher</button>
-        </form>
+        <>
+          <form id='login' onSubmit={formSubmit}>
+            <input type='search' id='recherche' name='recherche' required />
+            <button type='submit'>rechercher</button>
+          </form>
+        </>
       )}
     </>
   )

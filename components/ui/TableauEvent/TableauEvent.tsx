@@ -24,7 +24,8 @@ export default function TableauEvent ({ affichage, pageEvent }: Props) {
           {(pageEvent === 'enclos' || pageEvent === 'especes') && (
             <th scope='col'>Animal</th>
           )}
-          <th scope='col'>Observations</th> <th scope='col'>Createur</th>
+          <th scope='col'>Observations</th>
+          <th scope='col'>Createur</th>
         </tr>
       </thead>
       <tbody>

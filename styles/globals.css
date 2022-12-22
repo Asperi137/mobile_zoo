@@ -66,10 +66,14 @@ a {
   color: white;
   border-radius: 2em;
 }
-
+video {
+  margin: 2%;
+  width: 96%;
+  max-width: 350px;
+}
 input {
   padding: 1em;
-  min-width: 12em;
+  min-width: 10em;
   margin: 0.5em;
   border-radius: 2em;
   border: 1px solid rgb(0, 75, 75);
