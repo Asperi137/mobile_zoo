@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">zooMobile</string>
-    <string name="title_activity_main">zooMobile</string>
-    <string name="package_name">com.zoo.app</string>
-    <string name="custom_url_scheme">com.zoo.app</string>
+    <string name="app_name">ZooMobile</string>
+    <string name="title_activity_main">ZooMobile</string>
+    <string name="package_name">com.zoomobile.app</string>
+    <string name="custom_url_scheme">com.zoomobile.app</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.zoo.app;
+package com.zoomobile.app;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -55,7 +55,6 @@ a {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  border: 1px solid teal;
   color: teal;
   border-radius: 2em;
 }
@@ -66,11 +65,17 @@ a {
   color: white;
   border-radius: 2em;
 }
+.image {
+  margin: 0.5em;
+  border-radius: 2em;
+}
 video {
   margin: 2%;
   width: 96%;
   max-width: 350px;
+  border-radius: 1em;
 }
+
 input {
   padding: 1em;
   min-width: 10em;

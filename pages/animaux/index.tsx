@@ -2,23 +2,19 @@ import Especes from 'Types/Especes'
 import Link from 'next/link'
 import Animaux from 'Types/Animaux'
 import IsConnected from 'lib/isConnected'
-import { withSessionSsr } from 'lib/withSession'
-import User from 'Types/User'
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import apiConnect from 'lib/apiConnect'
 
 type Props = {
   animaux: Animaux[]
   especes: Especes[]
-  user: User
 }
 
-export default function Index ({ animaux, especes, user }: Props): JSX.Element {
+export default function Index ({ animaux, especes }: Props): JSX.Element {
   animaux.sort((a, b) => a.nom.localeCompare(b.nom))
   especes.sort((a, b) => a.nom.localeCompare(b.nom))
   return (
     <div className='containerV'>
-      {IsConnected(user) &&
+      {IsConnected() &&
         especes.map((espece: Especes) => (
           <div key={espece._id} className='containerV , alignCenter , bordered'>
             <Link href='/especes/[id]' as={`/especes/${espece._id}`}>
@@ -38,7 +34,7 @@ export default function Index ({ animaux, especes, user }: Props): JSX.Element {
             </div>
           </div>
         ))}
-      {!IsConnected(user) && (
+      {!IsConnected() && (
         <button className='btnRetour'>
           <Link href='/'>Veillez vous connecter</Link>
         </button>
@@ -47,22 +43,24 @@ export default function Index ({ animaux, especes, user }: Props): JSX.Element {
   )
 }
 
-export const getServerSideProps = withSessionSsr(
-  async function getServerSideProps ({ params, req }: Params) {
-    const headers = req.headers
-    const user = req.session.user
-    const especes: Especes[] = await fetch(`${apiConnect()}especes`, {
-      headers
-    }).then(res => res.json())
-    const animaux: Animaux[] = await fetch(`${apiConnect()}animaux`, {
-      headers
-    }).then(res => res.json())
-    return {
-      props: {
-        animaux,
-        especes,
-        user
-      }
-    }
+export async function getStaticProps () {
+  const options: RequestInit = {
+    credentials: 'include'
   }
-)
+
+  const especes: Especes[] = await fetch(
+    `${apiConnect()}especes`,
+    options
+  ).then(res => res.json())
+  const animaux: Animaux[] = await fetch(
+    `${apiConnect()}animaux`,
+    options
+  ).then(res => res.json())
+  return {
+    props: {
+      animaux,
+      especes
+    },
+    revalidate: 10
+  }
+}

@@ -5,14 +5,13 @@ import { useContext, useState } from 'react'
 type props = {
   cible: string
   action: string
-  headers: Headers
 }
 
-export default function BoutonAction ({ cible, action, headers }: props) {
+export default function BoutonAction ({ cible, action }: props) {
   const { role } = useContext(UserContext)
   const [verif, setverif] = useState('')
 
-  function valider (event: any, headers: Headers) {
+  function valider (event: any) {
     let type = 'especes'
     let data = {}
     event.preventDefault()
@@ -81,7 +80,7 @@ export default function BoutonAction ({ cible, action, headers }: props) {
         <form
           className='containerV'
           id={action}
-          onSubmit={event => valider(event, headers)}
+          onSubmit={event => valider(event)}
           method='POST'
         >
           <input

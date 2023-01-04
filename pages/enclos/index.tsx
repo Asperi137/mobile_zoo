@@ -2,24 +2,20 @@ import Enclos from 'Types/Enclos'
 import Zones from 'Types/Zones'
 import Link from 'next/link'
 import IsConnected from 'lib/isConnected'
-import { withSessionSsr } from 'lib/withSession'
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
-import User from 'Types/User'
 import apiConnect from 'lib/apiConnect'
 
 type Props = {
   enclos: Enclos[]
   zones: Zones[]
-  user: User
 }
 
-export default function Index ({ enclos, zones, user }: Props): JSX.Element {
+export default function Index ({ enclos, zones }: Props): JSX.Element {
   enclos.sort((a, b) => a.nom.localeCompare(b.nom))
   zones.sort((a, b) => a.nom.localeCompare(b.nom))
 
   return (
     <div className='containerV'>
-      {IsConnected(user) &&
+      {IsConnected() &&
         zones.map((zone: Zones) => (
           <div key={zone._id} className='containerV , alignCenter , bordered'>
             <h2 className='description'>{`${zone.nom}`}</h2>
@@ -37,7 +33,7 @@ export default function Index ({ enclos, zones, user }: Props): JSX.Element {
             </div>
           </div>
         ))}
-      {!IsConnected(user) && (
+      {!IsConnected() && (
         <button className='btnRetour'>
           <Link href='/'>Veillez vous connecter</Link>
         </button>
@@ -46,23 +42,22 @@ export default function Index ({ enclos, zones, user }: Props): JSX.Element {
   )
 }
 
-export const getServerSideProps = withSessionSsr(
-  async function getServerSideProps ({ params, req }: Params) {
-    const headers = req.headers
-    const user = req.session.user
-
-    const zones: Zones[] = await fetch(`${apiConnect()}zones/`, {
-      headers
-    }).then(res => res.json())
-    const enclos: Enclos[] = await fetch(`${apiConnect()}enclos/`, {
-      headers
-    }).then(res => res.json())
-    return {
-      props: {
-        enclos,
-        zones,
-        user
-      }
-    }
+export async function getStaticProps () {
+  const options: RequestInit = {
+    credentials: 'include'
   }
-)
+
+  const zones: Zones[] = await fetch(`${apiConnect()}zones/`, options).then(
+    res => res.json()
+  )
+  const enclos: Enclos[] = await fetch(`${apiConnect()}enclos/`, options).then(
+    res => res.json()
+  )
+  return {
+    props: {
+      enclos,
+      zones
+    },
+    revalidate: 10
+  }
+}

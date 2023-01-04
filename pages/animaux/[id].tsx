@@ -12,8 +12,6 @@ import InfoAnimal from 'components/ui/barreInfo/InfoAnimal'
 import { useState } from 'react'
 import BoutonEntrerSortir from 'components/ui/boutonAction/BoutonEntrerSortir'
 import Evenements from 'Types/Evenements'
-import { withSessionSsr } from 'lib/withSession'
-import User from 'Types/User'
 import apiConnect from 'lib/apiConnect'
 import TableauEvent, { tri } from 'components/ui/TableauEvent/TableauEvent'
 
@@ -23,8 +21,6 @@ type props = {
   enclos: Enclos
   zone: Zones
   event: Evenements[]
-  user: User
-  headers: Headers
 }
 
 export default function Index ({
@@ -32,15 +28,13 @@ export default function Index ({
   espece,
   enclos,
   zone,
-  event,
-  user,
-  headers
+  event
 }: props): JSX.Element {
   const [position, setPosition] = useState(animal.position)
 
   return (
     <div className='containerV'>
-      {IsConnected(user) && (
+      {IsConnected() && (
         <>
           <button className='btnRetour,alignCenter'>
             <Link href={`/especes/${espece._id}`} as={`/especes/${espece._id}`}>
@@ -49,21 +43,14 @@ export default function Index ({
           </button>
           <h2 className='alignCenter'>{animal.nom}</h2>
 
-          {(IsConnected(user) === 'veterinaire' ||
-            IsConnected(user) === 'admin') && (
-            <BoutonAction
-              headers={headers}
-              cible={animal._id}
-              action={'soigner'}
-            />
+          {(IsConnected() === 'veterinaire' || IsConnected() === 'admin') && (
+            <BoutonAction cible={animal._id} action={'soigner'} />
           )}
           <BoutonEntrerSortir
-            headers={headers}
             cible={animal._id}
             position={position}
             setPosition={setPosition}
           />
-
           <div className='alignCenter'>
             <InfoAnimal animal={animal} position={position} />
             <InfoEspece espece={espece} />
@@ -77,7 +64,7 @@ export default function Index ({
           </div>
         </>
       )}
-      {!IsConnected(user) && (
+      {!IsConnected() && (
         <button className='btnRetour'>
           <Link href='/'>Veillez vous connecter</Link>
         </button>
@@ -86,38 +73,57 @@ export default function Index ({
   )
 }
 
-export const getServerSideProps = withSessionSsr(
-  async function getServerSideProps ({ params, req }: Params) {
-    const headers = req.headers
-    const user = req.session.user
-    const animal = await fetch(`${apiConnect()}animaux/${params.id}`, {
-      headers
-    }).then(res => res.json())
-    const espece = await fetch(`${apiConnect()}especes/${animal.espece}`, {
-      headers
-    }).then(res => res.json())
-    const enclos = await fetch(`${apiConnect()}enclos/${espece.enclos}`, {
-      headers
-    }).then(res => res.json())
-    const zone = await fetch(`${apiConnect()}zones/${enclos.zone}`, {
-      headers
-    }).then(res => res.json())
-    const event = tri(
-      await fetch(`${apiConnect()}evenements/animaux/${params.id}`, {
-        headers
-      }).then(res => res.json())
-    )
-
-    return {
-      props: {
-        animal,
-        espece,
-        enclos,
-        zone,
-        event,
-        user,
-        headers
-      }
-    }
+export async function getStaticProps ({ params }: Params) {
+  const options: RequestInit = {
+    credentials: 'include'
   }
-)
+
+  const animal = await fetch(
+    `${apiConnect()}animaux/${params.id}`,
+    options
+  ).then(res => res.json())
+  const espece = await fetch(
+    `${apiConnect()}especes/${animal.espece}`,
+    options
+  ).then(res => res.json())
+  const enclos = await fetch(
+    `${apiConnect()}enclos/${espece.enclos}`,
+    options
+  ).then(res => res.json())
+  const zone = await fetch(`${apiConnect()}zones/${enclos.zone}`, options).then(
+    res => res.json()
+  )
+  const event = tri(
+    await fetch(`${apiConnect()}evenements/animaux/${params.id}`, options).then(
+      res => res.json()
+    )
+  )
+
+  return {
+    props: {
+      animal,
+      espece,
+      enclos,
+      zone,
+      event
+    },
+    revalidate: 10
+  }
+}
+
+export async function getStaticPaths () {
+  const options: RequestInit = {
+    credentials: 'include'
+  }
+
+  const animaux: Animaux[] = await fetch(
+    `${apiConnect()}animaux`,
+    options
+  ).then(res => res.json())
+
+  const paths = animaux.map(animal => ({
+    params: { id: animal._id }
+  }))
+
+  return { paths, fallback: false }
+}

@@ -10,8 +10,6 @@ import IsConnected from 'lib/isConnected'
 import BoutonAction from 'components/ui/boutonAction/BoutonAction'
 import TableauEvent, { tri } from 'components/ui/TableauEvent/TableauEvent'
 import Evenements from 'Types/Evenements'
-import { withSessionSsr } from 'lib/withSession'
-import User from 'Types/User'
 import apiConnect from 'lib/apiConnect'
 
 type props = {
@@ -20,8 +18,6 @@ type props = {
   enclos: Enclos
   zone: Zones
   event: Evenements[]
-  user: User
-  headers: Headers
 }
 
 export default function Index ({
@@ -29,13 +25,11 @@ export default function Index ({
   espece,
   enclos,
   zone,
-  event,
-  user,
-  headers
+  event
 }: props): JSX.Element {
   return (
     <div className='containerV'>
-      {IsConnected(user) && (
+      {IsConnected() && (
         <>
           <button className='btnRetour,alignCenter'>
             <Link
@@ -58,16 +52,8 @@ export default function Index ({
                 )
             )}
           </div>
-          <BoutonAction
-            headers={headers}
-            cible={espece._id}
-            action={'nourrir'}
-          />
-          <BoutonAction
-            headers={headers}
-            cible={espece._id}
-            action={'stimuler'}
-          />
+          <BoutonAction cible={espece._id} action={'nourrir'} />
+          <BoutonAction cible={espece._id} action={'stimuler'} />
           <div className='alignCenter'>
             <InfoEnclos enclos={enclos} zone={zone} />
             <InfoEspece espece={espece} />
@@ -90,40 +76,56 @@ export default function Index ({
   )
 }
 
-export const getServerSideProps = withSessionSsr(
-  async function getServerSideProps ({ params, req }: Params) {
-    const headers = req.headers
-    const user = req.session.user
-    const espece = await fetch(`${apiConnect()}especes/${params.id}`, {
-      headers
-    }).then(res => res.json())
-    const enclos: Enclos = await fetch(
-      `${apiConnect()}enclos/${espece.enclos}`,
-      {
-        headers
-      }
-    ).then(res => res.json())
-    const zone: Zones = await fetch(`${apiConnect()}zones/${enclos.zone}`, {
-      headers
-    }).then(res => res.json())
-    const animaux = await fetch(`${apiConnect()}animaux`, { headers }).then(
+export async function getStaticProps ({ params }: Params) {
+  const options: RequestInit = {
+    credentials: 'include'
+  }
+
+  const espece = await fetch(
+    `${apiConnect()}especes/${params.id}`,
+    options
+  ).then(res => res.json())
+  const enclos: Enclos = await fetch(
+    `${apiConnect()}enclos/${espece.enclos}`,
+    options
+  ).then(res => res.json())
+  const zone: Zones = await fetch(
+    `${apiConnect()}zones/${enclos.zone}`,
+    options
+  ).then(res => res.json())
+  const animaux = await fetch(`${apiConnect()}animaux`, options).then(res =>
+    res.json()
+  )
+  const event = tri(
+    await fetch(`${apiConnect()}evenements/especes/${params.id}`, options).then(
       res => res.json()
     )
-    const event = tri(
-      await fetch(`${apiConnect()}evenements/especes/${params.id}`, {
-        headers
-      }).then(res => res.json())
-    )
-    return {
-      props: {
-        animaux,
-        espece,
-        enclos,
-        zone,
-        event,
-        user,
-        headers
-      }
-    }
+  )
+  return {
+    props: {
+      animaux,
+      espece,
+      enclos,
+      zone,
+      event
+    },
+    revalidate: 10
   }
-)
+}
+
+export async function getStaticPaths () {
+  const options: RequestInit = {
+    credentials: 'include'
+  }
+
+  const especes: Especes[] = await fetch(
+    `${apiConnect()}especes`,
+    options
+  ).then(res => res.json())
+
+  const paths = especes.map(espece => ({
+    params: { id: espece._id }
+  }))
+
+  return { paths, fallback: false }
+}

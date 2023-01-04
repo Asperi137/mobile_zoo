@@ -8,10 +8,8 @@ const withTM = require('next-transpile-modules')([
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  experimental: {
-    images: {
-      unoptimized: true
-    }
+  images: {
+    unoptimized: true
   }
 }
 

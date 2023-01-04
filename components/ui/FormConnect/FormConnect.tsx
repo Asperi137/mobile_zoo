@@ -2,21 +2,25 @@ import IsConnected from 'lib/isConnected'
 import { UserContext } from 'lib/UserContext'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
-import Link from 'next/link'
+
+import apiConnect from 'lib/apiConnect'
 
 export default function FormConnect () {
   const { setRole } = useContext(UserContext)
   const router = useRouter()
 
   const deconnection = () => {
-    fetch(`/api/logout`, {
+    const data = { login: '', password: '', role: '' }
+    const JSONdata = JSON.stringify(data)
+    const endpoint = `${apiConnect()}auth/logout`
+    const options = {
       method: 'POST',
-      body: JSON.stringify({ login: '', password: '', role: '' })
-    })
+      body: JSONdata
+    }
+    fetch(endpoint, options)
       .then(res => res.json())
       .then(() => {
         setRole('')
-        router.push('/')
       })
   }
 
@@ -37,12 +41,12 @@ export default function FormConnect () {
       }
       const JSONdata = JSON.stringify(data)
       const endpoint = `/api/login`
-      const options = {
+      const options: RequestInit = {
         method: 'POST',
         body: JSONdata
       }
-
-      fetch(endpoint, options)
+      let req = new Request(endpoint, options)
+      fetch(req)
         .then(result => result.json())
         .then(response => {
           if (!response.role) {

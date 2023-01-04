@@ -6,8 +6,6 @@ import Especes from 'Types/Especes'
 import Zones from 'Types/Zones'
 import IsConnected from 'lib/isConnected'
 import BoutonAction from 'components/ui/boutonAction/BoutonAction'
-import { withSessionSsr } from 'lib/withSession'
-import User from 'Types/User'
 import apiConnect from 'lib/apiConnect'
 import TableauEvent, { tri } from 'components/ui/TableauEvent/TableauEvent'
 import Evenements from 'Types/Evenements'
@@ -17,21 +15,17 @@ type props = {
   especeslst: Especes[]
   zone: Zones
   event: Evenements[]
-  user: User
-  headers: Headers
 }
 
 export default function Index ({
   enclos,
   especeslst,
   zone,
-  event,
-  user,
-  headers
+  event
 }: props): JSX.Element {
   return (
     <div className='containerV'>
-      {IsConnected(user) && (
+      {IsConnected() && (
         <>
           <button className='btnRetour,alignCenter'>
             <Link href={`/enclos`} as={`/enclos`}>
@@ -53,14 +47,10 @@ export default function Index ({
             )}
           </div>
 
-          {(IsConnected(user) === 'veterinaire' ||
-            IsConnected(user) === 'responssableZone' ||
-            IsConnected(user) === 'admin') && (
-            <BoutonAction
-              cible={enclos._id}
-              action={'verifier'}
-              headers={headers}
-            />
+          {(IsConnected() === 'veterinaire' ||
+            IsConnected() === 'responssableZone' ||
+            IsConnected() === 'admin') && (
+            <BoutonAction cible={enclos._id} action={'verifier'} />
           )}
           <div className='alignCenter'>
             <InfoEnclos enclos={enclos} zone={zone} />
@@ -73,7 +63,7 @@ export default function Index ({
           </div>
         </>
       )}
-      {!IsConnected(user) && (
+      {!IsConnected() && (
         <button className='btnRetour'>
           <Link href='/'>Veillez vous connecter</Link>
         </button>
@@ -81,35 +71,52 @@ export default function Index ({
     </div>
   )
 }
-export const getServerSideProps = withSessionSsr(
-  async function getServerSideProps ({ params, req }: Params) {
-    const headers = req.headers
-    const user = req.session.user
-    const especeslst = await fetch(`${apiConnect()}especes`, { headers }).then(
+export async function getStaticProps ({ params }: Params) {
+  const options: RequestInit = {
+    credentials: 'include'
+  }
+
+  const especeslst = await fetch(`${apiConnect()}especes`, options).then(res =>
+    res.json()
+  )
+
+  const enclos = await fetch(
+    `${apiConnect()}enclos/${params.id}`,
+    options
+  ).then(res => res.json())
+
+  const zone = await fetch(`${apiConnect()}zones/${enclos.zone}`, options).then(
+    res => res.json()
+  )
+  const event = tri(
+    await fetch(`${apiConnect()}evenements/enclos/${params.id}`, options).then(
       res => res.json()
     )
-
-    const enclos = await fetch(`${apiConnect()}enclos/${params.id}`, {
-      headers
-    }).then(res => res.json())
-
-    const zone = await fetch(`${apiConnect()}zones/${enclos.zone}`, {
-      headers
-    }).then(res => res.json())
-    const event = tri(
-      await fetch(`${apiConnect()}evenements/enclos/${params.id}`, {
-        headers
-      }).then(res => res.json())
-    )
-    return {
-      props: {
-        enclos,
-        especeslst,
-        zone,
-        event,
-        user,
-        headers
-      }
-    }
+  )
+  return {
+    props: {
+      enclos,
+      especeslst,
+      zone,
+      event
+    },
+    revalidate: 10
   }
-)
+}
+
+export async function getStaticPaths () {
+  const options: RequestInit = {
+    credentials: 'include'
+  }
+
+  const encloslst: Enclos[] = await fetch(
+    `${apiConnect()}enclos`,
+    options
+  ).then(res => res.json())
+
+  const paths = encloslst.map(enclos => ({
+    params: { id: enclos._id }
+  }))
+
+  return { paths, fallback: false }
+}
