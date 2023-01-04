@@ -44,7 +44,7 @@ export default function Index ({
             {animaux.map(
               (animal: Animaux) =>
                 animal.espece === espece._id && (
-                  <button>
+                  <button key={animal._id}>
                     <Link href='/animaux/[id]' as={`/animaux/${animal._id}`}>
                       {`${animal.nom}`}
                     </Link>
