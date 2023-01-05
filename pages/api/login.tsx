@@ -53,7 +53,7 @@ async function login (
       }
       await req.session.save()
       res.status(200).json({
-        login: login,
+        login:  req.body.login,
         role: response.role
       })
     })
