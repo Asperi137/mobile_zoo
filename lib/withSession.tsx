@@ -12,7 +12,7 @@ export const sessionOptions = {
   password: 'complex_password_at_least_32_characters_long',
   cookieName: 'ZOOCOOKIE',
   cookieOptions: {
-    secure: false,
+    secure: true,
     httpOnly: false,
     sameSite: none,
     domain: 'onrender.com'
