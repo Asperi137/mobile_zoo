@@ -2,6 +2,8 @@ import apiConnect from 'lib/apiConnect'
 import { UserContext } from 'lib/UserContext'
 import { useContext, useState } from 'react'
 
+import { cookies } from 'next/headers'
+
 type props = {
   cible: string
   action: string
@@ -57,6 +59,8 @@ export default function BoutonAction ({ cible, action }: props) {
         break
     }
 
+    const cookie = cookies().get('ZOOCOOKIE')
+    console.log(cookie)
     const JSONdata = JSON.stringify(data)
     const options: RequestInit = {
       method: 'POST',
