@@ -6,11 +6,13 @@ import {
 } from 'next'
 import User from 'Types/User'
 
+const none: 'none' = 'none'
+
 export const sessionOptions = {
   password: 'complex_password_at_least_32_characters_long',
   cookieName: 'ZOOCOOKIE',
   cookieOptions: {
-    domain: 'onrender.com',
+    sameSite: none,
     secure: true
   }
 }
