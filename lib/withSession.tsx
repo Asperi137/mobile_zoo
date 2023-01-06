@@ -13,6 +13,7 @@ export const sessionOptions = {
   cookieName: 'ZOOCOOKIE',
   cookieOptions: {
     sameSite: none,
+    domain: 'monzoo.onrender.com',
     secure: true
   }
 }
