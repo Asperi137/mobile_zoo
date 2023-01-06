@@ -3,10 +3,11 @@ import Link from 'next/link'
 import BarreRecherche from '../barreRecherche/BarreRecherche'
 import Image from 'next/dist/client/image'
 import scan from 'public/qrcode.png'
+import IsConnected from 'lib/isConnected'
 
 export default function Header (): JSX.Element {
   return (
-    <>
+    <>{IsConnected() && 
       <Link href='/scan'>
         <Image
           src={scan}
@@ -15,7 +16,7 @@ export default function Header (): JSX.Element {
           height={50}
           className={classes.logo_scan}
         />
-      </Link>
+      </Link>}
       <header className={classes.Header}>
         <Link href='/'>
           <h1>Mon Zoo Mobile !</h1>

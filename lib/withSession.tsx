@@ -6,16 +6,12 @@ import {
 } from 'next'
 import User from 'Types/User'
 
-const none: 'none' = 'none'
-
 export const sessionOptions = {
   password: 'complex_password_at_least_32_characters_long',
   cookieName: 'ZOOCOOKIE',
   cookieOptions: {
-    secure: true,
-    httpOnly: false,
-    sameSite: none,
-    domain: 'onrender.com'
+    domain: 'monzoomobile.onrender.com',
+    secure: process.env.NODE_ENV === 'production'
   }
 }
 
