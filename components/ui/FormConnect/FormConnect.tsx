@@ -43,6 +43,7 @@ export default function FormConnect () {
       const endpoint = `/api/login`
       const options: RequestInit = {
         method: 'POST',
+        credentials: 'include',
         body: JSONdata
       }
       let req = new Request(endpoint, options)
