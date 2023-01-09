@@ -12,8 +12,6 @@ export const sessionOptions = {
   password: 'complex_password_at_least_32_characters_long',
   cookieName: 'ZOOCOOKIE',
   cookieOptions: {
-    sameSite: none,
-    domain: 'monzoo.onrender.com',
     secure: true
   }
 }

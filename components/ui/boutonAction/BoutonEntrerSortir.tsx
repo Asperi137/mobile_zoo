@@ -36,7 +36,7 @@ export default function BoutonEntrerSortir ({
       credentials: 'include',
       body: JSONdata
     }
-    fetch(`${apiConnect()}${type}/${action}`, options).then(() => {
+    fetch(`/api/${type}/${action}`, options).then(() => {
       if (action === 'sortir') {
         setPosition('dehors')
       } else setPosition('dedans')

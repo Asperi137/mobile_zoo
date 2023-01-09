@@ -64,7 +64,7 @@ export default function BoutonAction ({ cible, action }: props) {
       body: JSONdata
     }
 
-    let req = new Request(`${apiConnect()}${type}/${action}`, options)
+    let req = new Request(`/api/${type}/${action}`, options)
     fetch(req).then(() => setverif(''))
   }
 

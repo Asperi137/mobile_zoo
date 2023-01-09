@@ -7,16 +7,18 @@ import IsConnected from 'lib/isConnected'
 
 export default function Header (): JSX.Element {
   return (
-    <>{IsConnected() && 
-      <Link href='/scan'>
-        <Image
-          src={scan}
-          alt='scan'
-          width={50}
-          height={50}
-          className={classes.logo_scan}
-        />
-      </Link>}
+    <>
+      {IsConnected() && (
+        <Link href='/scan'>
+          <Image
+            src={scan}
+            alt='scan'
+            width={50}
+            height={50}
+            className={classes.logo_scan}
+          />
+        </Link>
+      )}
       <header className={classes.Header}>
         <Link href='/'>
           <h1>Mon Zoo Mobile !</h1>
